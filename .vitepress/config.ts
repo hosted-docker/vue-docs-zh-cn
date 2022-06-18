@@ -671,5 +671,5 @@ export default defineConfigWithTheme<ThemeConfig>({
   vue: {
     reactivityTransform: true
   },
-  base: '/vue3/'
+  base: '/mirror/vue3/'
 })
