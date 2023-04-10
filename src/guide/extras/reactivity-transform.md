@@ -1,18 +1,20 @@
 # 响应性语法糖 {#reactivity-transform}
 
-:::warning 实验性功能
-响应性语法糖目前是一个实验性功能，默认是禁用的，需要[显式选择使用](#explicit-opt-in)。在最终确定前仍可能发生变化，你可以查看 [GitHub 上的提案与讨论](https://github.com/vuejs/rfcs/discussions/369)来关注和跟进最新进展。
+:::danger 已废弃的实验性功能
+响应性语法糖曾经是一个实验性功能，且已被废弃，请阅读[废弃原因](https://github.com/vuejs/rfcs/discussions/369#discussioncomment-5059028)。
+
+在未来的一个小版本更新中，它将会从 Vue core 中被移除。如需继续使用，请通过 [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html) 插件。
 :::
 
 :::tip 组合式 API 特有
-响应性语法糖是组合式 API 特有的功能，并且需要一个构建步骤。
+响应性语法糖是组合式 API 特有的功能，且必须通过构建步骤使用。
 :::
 
 ## ref vs. 响应式变量 {#refs-vs-reactive-variables}
 
-自从引入组合式 API 的概念以来，一个主要的未能解决的问题就是 ref 和响应式对象的使用方式。到处使用 `.value` 无疑是很繁琐的，并且在没有类型系统的帮助时很容易漏掉。
+自从引入组合式 API 的概念以来，一个主要的未解决的问题就是 ref 和响应式对象到底用哪个。响应式对象存在解构丢失响应性的问题，而 ref 需要到处使用 `.value` 则感觉很繁琐，并且在没有类型系统的帮助时很容易漏掉 `.value`。
 
-[Vue 的响应性语法糖](https://github.com/vuejs/core/tree/main/packages/reactivity-transform)是一个编译时的转换过程，使我们可以像这样书写代码：
+[Vue 的响应性语法糖](https://github.com/vuejs/core/tree/main/packages/reactivity-transform)是一个编译时的转换步骤，让我们可以像这样书写代码：
 
 ```vue
 <script setup>
@@ -46,13 +48,13 @@ function increment() {
 }
 ```
 
-每一个会返回 ref 的响应性 API 都有一个相对应的、以 `$` 为前缀的宏函数。包括以下这些 API：
+每一个会返回 ref 的响应式 API 都有一个相对应的、以 `$` 为前缀的宏函数。包括以下这些 API：
 
-- [`ref`](/api/reactivity-core.html#ref) -> `$ref`
-- [`computed`](/api/reactivity-core.html#computed) -> `$computed`
-- [`shallowRef`](/api/reactivity-advanced.html#shallowref) -> `$shallowRef`
-- [`customRef`](/api/reactivity-advanced.html#customref) -> `$customRef`
-- [`toRef`](/api/reactivity-utilities.html#toref) -> `$toRef`
+- [`ref`](/api/reactivity-core#ref) -> `$ref`
+- [`computed`](/api/reactivity-core#computed) -> `$computed`
+- [`shallowRef`](/api/reactivity-advanced#shallowref) -> `$shallowRef`
+- [`customRef`](/api/reactivity-advanced#customref) -> `$customRef`
+- [`toRef`](/api/reactivity-utilities#toref) -> `$toRef`
 
 当启用响应性语法糖时，这些宏函数都是全局可用的、无需手动导入。但如果你想让它更明显，你也可以选择从 `vue/macros` 中引入它们：
 
@@ -107,11 +109,11 @@ let count = $(myCreateRef())
 
 现在的 `<script setup>` 中对 `defineProps` 宏的使用有两个痛点：
 
-1. 和 `.value` 类似，为了保持响应性，你始终需要以 `props.x` 的方式访问这些 prop。这意味着你不能够通过解构 `defineProps` 因为得到的变量将不是响应式的、也不会更新。
+1. 和 `.value` 类似，为了保持响应性，你始终需要以 `props.x` 的方式访问这些 prop。这意味着你不能够解构 `defineProps` 的返回值，因为得到的变量将不是响应式的、也不会更新。
 
-2. 当使用[基于类型的 props 的声明](https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features)时，无法很方便地声明这些 prop 的默认值。为此我们提供了 `withDefaults()` 这个 API，但使用起来仍然很笨拙。
+2. 当使用[基于类型的 props 的声明](https://v3.vuejs.org/api/sfc-script-setup#typescript-only-features)时，无法很方便地声明这些 prop 的默认值。为此我们提供了 `withDefaults()` 这个 API，但使用起来仍然很笨拙。
 
-而有了响应性语法糖，我们就也可以在 `defineProps` 时使用响应式变量相同的解构写法了：
+当 `defineProps` 与解构一起使用时，我们可以通过应用编译时转换来解决这些问题，类似于我们之前看到的 `$()`：
 
 ```html
 <script setup lang="ts">
@@ -154,7 +156,7 @@ export default {
 }
 ```
 
-## 保持在函数间的响应性 {#retaining-reactivity-across-function-boundaries}
+## 保持在函数间传递时的响应性 {#retaining-reactivity-across-function-boundaries}
 
 虽然响应式变量使我们可以不再受 `.value` 的困扰，但它也使得我们在函数间传递响应式变量时可能造成“响应性丢失”的问题。这可能在以下两种场景中出现：
 
@@ -246,9 +248,9 @@ function useMouse() {
 }
 ```
 
-### 在已解构的 prop 上使用 `$$()` {#usage-on-destructured-props}
+### 在已解构的 props 上使用 `$$()` {#using-on-destructured-props}
 
-`$$()` 适用于已解构的 prop，因为它们也是响应式的变量。编译器会高效地通过 `toRef` 来做转换：
+`$$()` 也适用于已解构的 props，因为它们也是响应式的变量。编译器会高效地通过 `toRef` 来做转换：
 
 ```ts
 const { count } = defineProps<{ count: number }>()
@@ -267,7 +269,7 @@ setup(props) {
 
 ## TypeScript 集成 <sup class="vt-badge ts" /> {#typescript-integration}
 
-Vue 为这些宏函数都提供了类型声明 (全局可用) 并且类型都会符合你的使用预期。它与标准的 TypeScript 语义没有不兼容之处，因此它的语法可以与所有现有的工具兼容。
+Vue 为这些宏函数都提供了类型声明 (全局可用)，因此类型推导都会符合预期。它与标准的 TypeScript 语义没有不兼容之处，因此它的语法可以与所有现有的工具兼容。
 
 这也意味着这些宏函数在任何 JS / TS 文件中都是合法的，不是仅能在 Vue SFC 中使用。
 
@@ -277,16 +279,18 @@ Vue 为这些宏函数都提供了类型声明 (全局可用) 并且类型都会
 /// <reference types="vue/macros-global" />
 ```
 
-若你是从 `vue/macros` 中显式引入宏函数时，则不需要像这样全局声明了。
+若你是从 `vue/macros` 中显式引入宏函数时，则不需要像这样全局声明。
 
 ## 显式启用 {#explicit-opt-in}
 
-响应性语法糖目前默认是关闭状态，需要你显式选择启用。此外，接下来的所有配置都需要 `vue@^3.2.25`。
+:::warning
+以下内容仅适用于 Vue 3.3 及以下版本。Core 支持将在 3.4 及以上版本中被移除。如需继续使用，请迁移至 [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html)。
+:::
 
 ### Vite {#vite}
 
-- 需要 `@vitejs/plugin-vue@^2.0.0`
-- 应用于 SFC 和 js(x)/ts(x) 文件。在执行转换之前，会对文件进行快速的使用检查，因此不使用宏的文件应该不会有性能损失。
+- 需要 `@vitejs/plugin-vue@>=2.0.0`
+- 应用于 SFC 和 js(x)/ts(x) 文件。在执行转换之前，会对文件进行快速的使用检查，因此不使用宏的文件不会有性能损失。
 - 注意 `reactivityTransform` 现在是一个插件的顶层选项，而不再是位于 `script.refSugar` 之中了，因为它不仅仅只对 SFC 起效。
 
 ```js
@@ -303,7 +307,7 @@ export default {
 ### `vue-cli` {#vue-cli}
 
 - 目前仅对 SFC 起效
-- 需要 `vue-loader@^17.0.0`
+- 需要 `vue-loader@>=17.0.0`
 
 ```js
 // vue.config.js
@@ -325,7 +329,7 @@ module.exports = {
 ### 仅用 `webpack` + `vue-loader` {#plain-webpack-vue-loader}
 
 - 目前仅对 SFC 起效
-- 需要 `vue-loader@^17.0.0`
+- 需要 `vue-loader@>=17.0.0`
 
 ```js
 // webpack.config.js

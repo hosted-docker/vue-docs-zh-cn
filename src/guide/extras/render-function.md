@@ -4,9 +4,9 @@ outline: deep
 
 # 渲染函数 & JSX {#render-functions-jsx}
 
-在绝大多数情况下，Vue 推荐使用模板语法来搭建 HTML。然而在某些使用场景下，我们真的需要用到 JavaScript 完全的编程能力。这时**渲染函数**就派上用场了。
+在绝大多数情况下，Vue 推荐使用模板语法来创建应用。然而在某些使用场景下，我们真的需要用到 JavaScript 完全的编程能力。这时**渲染函数**就派上用场了。
 
-> 如果你还不熟悉虚拟 DOM 和渲染函数的概念的话，请确保先阅读[渲染机制](/guide/extras/rendering-mechanism.html)章节。
+> 如果你还不熟悉虚拟 DOM 和渲染函数的概念的话，请确保先阅读[渲染机制](/guide/extras/rendering-mechanism)章节。
 
 ## 基本用法 {#basic-usage}
 
@@ -26,7 +26,7 @@ const vnode = h(
 )
 ```
 
-`h()` 是 **hyperscript** 的简称——意思是“能生成 HTML (超文本标记语言) 的 JavaScript”。这个名字来源于许多虚拟 DOM 实现时共享的约定。一个更准确的名称应该是 `createVnode()`，但当你需要多次使用渲染函数时，一个简短的名字能更好地帮到你。
+`h()` 是 **hyperscript** 的简称——意思是“能生成 HTML (超文本标记语言) 的 JavaScript”。这个名字来源于许多虚拟 DOM 实现默认形成的约定。一个更准确的名称应该是 `createVnode()`，但当你需要多次使用渲染函数时，一个简短的名字会更省力。
 
 `h()` 函数的使用方式非常的灵活：
 
@@ -39,8 +39,8 @@ h('div', { id: 'foo' })
 // Vue 会自动将它们分配到正确的位置
 h('div', { class: 'bar', innerHTML: 'hello' })
 
-// props modifiers such as .prop and .attr can be added
-// with '.' and `^' prefixes respectively
+// 像 `.prop` 和 `.attr` 这样的的属性修饰符
+// 可以分别通过 `.` 和 `^` 前缀来添加
 h('div', { '.name': 'some-name', '^width': '100' })
 
 // 类与样式可以像在模板中一样
@@ -73,7 +73,7 @@ vnode.key // null
 ```
 
 ::: warning 注意事项
-完整的 `VNode` 接口包含其他内部 property，但是强烈建议避免使用这些没有在这里列举出的 property。这样能够避免因内部 property 变更而导致的不兼容性问题。
+完整的 `VNode` 接口包含其他内部属性，但是强烈建议避免使用这些没有在这里列举出的属性。这样能够避免因内部属性变更而导致的不兼容性问题。
 :::
 
 ### 声明渲染函数 {#declaring-render-function}
@@ -186,7 +186,7 @@ function Hello() {
 }
 ```
 
-没错，这就是一个有效的 Vue 组件！参阅[函数式组件](#functional-components)来了解更多语法细节。
+没错，这就是一个合法的 Vue 组件！参阅[函数式组件](#functional-components)来了解更多语法细节。
 
 ### Vnodes 必须唯一 {#vnodes-must-be-unique}
 
@@ -232,12 +232,12 @@ const vnode = <div id={dynamicId}>hello, {userName}</div>
 
 `create-vue` 和 Vue CLI 都有预置的 JSX 语法支持。如果你想手动配置 JSX，请参阅 [`@vue/babel-plugin-jsx`](https://github.com/vuejs/jsx-next) 文档获取更多细节。
 
-虽然最早是由 React 引入，但实际上 JSX 语法并没有定义运行时语义，并且能被编译成成各种不同的输出形式。如果你之前使用过 JSX 语法，那么请注意 **Vue 的 JSX 编译方式与 React 中 JSX 的编译方式不同**，因此你不能在 Vue 应用中使用 React 的 JSX 编译。与 React JSX 语法的一些明显区别包括：
+虽然最早是由 React 引入，但实际上 JSX 语法并没有定义运行时语义，并且能被编译成各种不同的输出形式。如果你之前使用过 JSX 语法，那么请注意 **Vue 的 JSX 编译方式与 React 中 JSX 的编译方式不同**，因此你不能在 Vue 应用中使用 React 的 JSX 编译。与 React JSX 语法的一些明显区别包括：
 
 - 可以使用 HTML attributes 比如 `class` 和 `for` 作为 props - 不需要使用 `className` 或 `htmlFor`。
 - 传递子元素给组件 (比如 slots) 的[方式不同](#passing-slots)。
 
-Vue 的类型定义也提供了 TSX 语法的类型推断支持。当使用 TSX 语法时，确保在 `tsconfig.json` 中配置了 `"jsx": "preserve"`，这样的 TypeScript 就能保证 Vue JSX 语法编译过程中的完整性。
+Vue 的类型定义也提供了 TSX 语法的类型推导支持。当使用 TSX 语法时，确保在 `tsconfig.json` 中配置了 `"jsx": "preserve"`，这样的 TypeScript 就能保证 Vue JSX 语法编译过程中的完整性。
 
 ## 渲染函数案例 {#render-function-recipes}
 
@@ -363,7 +363,7 @@ h(
 
 ### 事件修饰符 {#event-modifiers}
 
-对于 `.passive` 、`.capture` 和 `.once` 事件修饰符，可以使用驼峰写法将他们拼接在事件名后面：
+对于 `.passive`、`.capture` 和 `.once` 事件修饰符，可以使用驼峰写法将他们拼接在事件名后面：
 
 实例：
 
@@ -389,7 +389,7 @@ h('input', {
 />
 ```
 
-对于事件和按键修饰符，可以使用 [`withModifiers`](/api/render-function.html#withmodifiers) 函数：
+对于事件和按键修饰符，可以使用 [`withModifiers`](/api/render-function#withmodifiers) 函数：
 
 ```js
 import { withModifiers } from 'vue'
@@ -446,7 +446,7 @@ function render() {
 }
 ```
 
-如果一个组件是用名字注册的，不能直接导入 (例如，由一个库全局注册)，可以使用 [`resolveComponent()`](/api/render-function.html#resolvecomponent) 来解决这个问题。
+如果一个组件是用名字注册的，不能直接导入 (例如，由一个库全局注册)，可以使用 [`resolveComponent()`](/api/render-function#resolvecomponent) 来解决这个问题。
 
 ### 渲染插槽 {#rendering-slots}
 
@@ -489,7 +489,7 @@ export default {
 </div>
 <div class="options-api">
 
-在渲染函数中，可以通过 [this.$slots](/api/component-instance.html#slots) 来访问插槽：
+在渲染函数中，可以通过 [this.$slots](/api/component-instance#slots) 来访问插槽：
 
 ```js
 export default {
@@ -559,7 +559,7 @@ h(MyComponent, null, {
 
 ### 内置组件 {#built-in-components}
 
-诸如 `<KeepAlive>`、`<Transition>`、`<TransitionGroup>`、`<Teleport>` 和 `<Suspense>` 等[内置组件](/api/built-in-components.html)在渲染函数中必须导入才能使用：
+诸如 `<KeepAlive>`、`<Transition>`、`<TransitionGroup>`、`<Teleport>` 和 `<Suspense>` 等[内置组件](/api/built-in-components)在渲染函数中必须导入才能使用：
 
 <div class="composition-api">
 
@@ -628,7 +628,7 @@ export default {
 
 ### 自定义指令 {#custom-directives}
 
-可以使用 [`withDirectives`](/api/render-function.html#withdirectives) 将自定义指令应用于 VNode：
+可以使用 [`withDirectives`](/api/render-function#withdirectives) 将自定义指令应用于 vnode：
 
 ```js
 import { h, withDirectives } from 'vue'
@@ -645,13 +645,13 @@ const vnode = withDirectives(h('div'), [
 ])
 ```
 
-当一个指令是以名称注册并且不能被直接导入时，可以使用 [`resolveDirective`](/api/render-function.html#resolvedirective) 函数来解决这个问题。
+当一个指令是以名称注册并且不能被直接导入时，可以使用 [`resolveDirective`](/api/render-function#resolvedirective) 函数来解决这个问题。
 
 ## 函数式组件 {#functional-components}
 
-函数式组件是自身没有任何状态的组件的另一种形式。它们在渲染过程中不会创建组件实例，并跳过常规的组件生命周期。
+函数式组件是一种定义自身没有任何状态的组件的方式。它们很像纯函数：接收 props，返回 vnodes。函数式组件在渲染过程中不会创建组件实例 (也就是说，没有 `this`)，也不会触发常规的组件生命周期钩子。
 
-我们使用的是一个简单函数，而不是一个选项对象，来创建函数式组件。该函数实际上就是该组件的 `render` 函数。
+我们用一个普通的函数而不是一个选项对象来创建函数式组件。该函数实际上就是该组件的渲染函数。
 
 <div class="composition-api">
 
@@ -674,11 +674,11 @@ function MyComponent(props, context) {
 }
 ```
 
-第二个参数 `context` 包含三个 property：`attrs`、 `emit` 和 `slots`。它们分别相当于实例的 [`$attrs`](/api/component-instance.html#attrs)、[`$emit`](/api/component-instance.html#emit) 和 [`$slots`](/api/component-instance.html#slots) 这几个 property。
+第二个参数 `context` 包含三个属性：`attrs`、`emit` 和 `slots`。它们分别相当于组件实例的 [`$attrs`](/api/component-instance#attrs)、[`$emit`](/api/component-instance#emit) 和 [`$slots`](/api/component-instance#slots) 这几个属性。
 
 </div>
 
-大多数常规组件的配置选项在函数式组件中都不可用。然而我们还是可以把 [`props`](/api/options-state.html#props) 和 [`emits`](/api/options-state.html#emits) 作为 property 加入，以达到定义它们的目的：
+大多数常规组件的配置选项在函数式组件中都不可用，除了 [`props`](/api/options-state#props) 和 [`emits`](/api/options-state#emits)。我们可以给函数式组件添加对应的属性来声明它们：
 
 ```js
 MyComponent.props = ['value']
@@ -687,5 +687,11 @@ MyComponent.emits = ['click']
 
 如果这个 `props` 选项没有被定义，那么被传入函数的 `props` 对象就会像 `attrs` 一样会包含所有 attribute。除非指定了 `props` 选项，否则每个 prop 的名字将不会基于驼峰命名法被一般化处理。
 
-函数式组件可以像普通组件一样被注册和消费。如果你将一个函数作为第一个参数传入 `h`，它将会被当作一个函数式组件来对待。
+对于有明确 `props` 的函数式组件，[attribute 透传](/guide/components/attrs)的原理与普通组件基本相同。然而，对于没有明确指定 `props` 的函数式组件，只有 `class`、`style` 和 `onXxx` 事件监听器将默认从 `attrs` 中继承。在这两种情况下，可以将 `inheritAttrs` 设置为 `false` 来禁用属性继承：
+
+```js
+MyComponent.inheritAttrs = false
+```
+
+函数式组件可以像普通组件一样被注册和使用。如果你将一个函数作为第一个参数传入 `h`，它将会被当作一个函数式组件来对待。
 

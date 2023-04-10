@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import PartnerHero from './PartnerHero.vue'
 import PartnerList from './PartnerList.vue'
 import PartnerJoin from './PartnerJoin.vue'
 import { Partner } from './type'
 import { VTIconSearch } from '@vue/theme'
 
-let query = $ref('')
+const query = ref('')
 
 function filter(p: Partner): boolean {
   return (
-    includes(p.name, query) || p.region.some((r) => includes(r, query))
+    includes(p.name, query.value) ||
+    p.region.some((r) => includes(r, query.value))
   )
 }
 
@@ -19,7 +21,7 @@ function includes(a: string, b: string) {
 </script>
 
 <template>
-  <PartnerHero title="浏览器所有合作伙伴" />
+  <PartnerHero title="浏览所有合作伙伴" />
   <div class="container">
     <VTIconSearch class="icon" />
     <input

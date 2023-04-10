@@ -5,10 +5,10 @@ outline: deep
 # Suspense {#suspense}
 
 :::warning 实验性功能
-`<Suspense>` 是一项实验性功能。不能保证它会成为稳定版，而且在那之前，相关 API 也可能会发生变化。
+`<Suspense>` 是一项实验性功能。它不一定会最终成为稳定功能，并且在稳定之前相关 API 也可能会发生变化。
 :::
 
-`<Suspense>` 是一个内置组件，用来在组件树中编排异步依赖。它可以在等待组件树下的多个嵌套异步依赖项解析完成时，呈现加载状态。
+`<Suspense>` 是一个内置组件，用来在组件树中协调对异步依赖的处理。它让我们可以在组件树上层等待下层的多个嵌套异步依赖项解析完成，并可以在等待时渲染一个加载状态。
 
 ## 异步依赖 {#async-dependencies}
 
@@ -32,7 +32,7 @@ outline: deep
 
 1. 带有异步 `setup()` 钩子的组件。这也包含了使用 `<script setup>` 时有顶层 `await` 表达式的组件。
 
-2. [异步组件](/guide/components/async.html)。
+2. [异步组件](/guide/components/async)。
 
 ### `async setup()` {#async-setup}
 
@@ -65,7 +65,7 @@ const posts = await res.json()
 
 ### 异步组件 {#async-components}
 
-异步组件默认就是 **“suspensible”** 的。这意味着如果组件关系链上有一个 `<Suspense>`，那么这个异步组件就会被当作这个 `<Suspense>` 的一个异步依赖。在这种情况下，加载状态是由 `<Suspense>` 控制，而该组件自己的加载、报错、延时和超时等选项都将被忽略。
+异步组件默认就是<strong>“suspensible”</strong>的。这意味着如果组件关系链上有一个 `<Suspense>`，那么这个异步组件就会被当作这个 `<Suspense>` 的一个异步依赖。在这种情况下，加载状态是由 `<Suspense>` 控制，而该组件自己的加载、报错、延时和超时等选项都将被忽略。
 
 异步组件也可以通过在选项中指定 `suspensible: false` 表明不用 `Suspense` 控制，并让组件始终自己控制其加载状态。
 
@@ -95,19 +95,19 @@ const posts = await res.json()
 
 ## 事件 {#events}
 
-除了 `pending` 事件之外，`<suspense>` 组件还有 `resolve` 和 `fallback` 事件。`pending` 事件是在进入挂起状态时触发。`resolve` 事件是在 `default` 插槽完成获取新内容时触发。`fallback` 事件则是在 `fallback` 插槽展示时触发。
+`<Suspense>` 组件会触发三个事件：`pending`、`resolve` 和 `fallback`。`pending` 事件是在进入挂起状态时触发。`resolve` 事件是在 `default` 插槽完成获取新内容时触发。`fallback` 事件则是在 `fallback` 插槽的内容显示时触发。
 
 例如，可以使用这些事件在加载新组件时在之前的 DOM 最上层显示一个加载指示器。
 
 ## 错误处理 {#error-handling}
 
-`<Suspense>` 组件自身目前还不提供错误处理，不过你可以使用 [`errorCaptured`](/api/options-lifecycle.html#errorcaptured) 选项或者 [`onErrorCaptured()`](/api/composition-api-lifecycle.html#onerrorcaptured) 钩子，在使用到 `<Suspense>` 的父组件中捕获和处理异步错误。
+`<Suspense>` 组件自身目前还不提供错误处理，不过你可以使用 [`errorCaptured`](/api/options-lifecycle#errorcaptured) 选项或者 [`onErrorCaptured()`](/api/composition-api-lifecycle#onerrorcaptured) 钩子，在使用到 `<Suspense>` 的父组件中捕获和处理异步错误。
 
 ## 和其他组件结合 {#combining-with-other-components}
 
 我们常常会将 `<Suspense>` 和 [`<Transition>`](./transition)、[`<KeepAlive>`](./keep-alive) 等组件结合。要保证这些组件都能正常工作，嵌套的顺序非常重要。
 
-另外，这些组件都通常与 [Vue Router](https://next.router.vuejs.org/) 中的 `<RouterView>` 组件结合使用。
+另外，这些组件都通常与 [Vue Router](https://router.vuejs.org/zh/) 中的 `<RouterView>` 组件结合使用。
 
 下面的示例展示了如何嵌套这些组件，使它们都能按照预期的方式运行。若想组合得更简单，你也可以删除一些你不需要的组件：
 
@@ -131,4 +131,4 @@ const posts = await res.json()
 </RouterView>
 ```
 
-Vue Router 使用动态导入对[懒加载组件](https://next.router.vuejs.org/guide/advanced/lazy-loading.html)进行了内置支持。这些与异步组件不同，目前他们不会触发 `<Suspense>`。但是，它们仍然可以有异步组件作为后代，这些组件可以照常触发 `<Suspense>`。
+Vue Router 使用动态导入对[懒加载组件](https://router.vuejs.org/zh/guide/advanced/lazy-loading.html)进行了内置支持。这些与异步组件不同，目前他们不会触发 `<Suspense>`。但是，它们仍然可以有异步组件作为后代，这些组件可以照常触发 `<Suspense>`。

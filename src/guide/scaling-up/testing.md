@@ -6,15 +6,15 @@ import TestingApiSwitcher from './TestingApiSwitcher.vue'
 
 ## 为什么需要测试 {#why-test}
 
-自动化测试通过预防回归，并鼓励将应用分解为可测试的函数、模块、类和组件，从而帮助你和你的团队快速、自信地构建复杂的 Vue 应用。与任何应用一样，新的 Vue 应用可能会以多种方式崩溃，因此，在发布前捕获并解决这些问题就变得十分重要。
+自动化测试能够预防无意引入的 bug，并鼓励开发者将应用分解为可测试、可维护的函数、模块、类和组件。这能够帮助你和你的团队更快速、自信地构建复杂的 Vue 应用。与任何应用一样，新的 Vue 应用可能会以多种方式崩溃，因此，在发布前发现并解决这些问题就变得十分重要。
 
 在本篇指引中，我们将介绍一些基本术语，并就你的 Vue 3 应用应选择哪些工具提供一些建议。
 
-还有一个特定用于 Vue 的小节，介绍了组合式函数的测试，查看下面的的[测试组合式函数](#testing-composables)了解更多细节。
+还有一个特定用于 Vue 的小节，介绍了组合式函数的测试，详情请参阅[测试组合式函数](#testing-composables)。
 
 ## 何时测试 {#when-to-test}
 
-尽早开始测试！我们建议你尽快开始编写测试。在开始为你的应用添加测试前，等的时间越长，应用就会有越多的依赖，想要开始添加测试就越困难。
+越早越好！我们建议你尽快开始编写测试。拖得越久，应用就会有越多的依赖和复杂性，想要开始添加测试也就越困难。
 
 ## 测试的类型 {#testing-types}
 
@@ -32,7 +32,7 @@ import TestingApiSwitcher from './TestingApiSwitcher.vue'
 
 ## 单元测试 {#unit-testing}
 
-编写单元测试是为了验证小的、独立的代码单元是否按预期工作。一个单元测试通常覆盖一个单个函数、类、组合式函数或模块。单元测试侧重于逻辑上的正确性，只关注应用程序整体功能的一小部分。他们可能会模拟你的应用程序环境的很大一部分（如初始状态、复杂的类、第三方模块和网络请求）。
+编写单元测试是为了验证小的、独立的代码单元是否按预期工作。一个单元测试通常覆盖一个单个函数、类、组合式函数或模块。单元测试侧重于逻辑上的正确性，只关注应用整体功能的一小部分。他们可能会模拟你的应用环境的很大一部分（如初始状态、复杂的类、第三方模块和网络请求）。
 
 一般来说，单元测试将捕获函数的业务逻辑和逻辑正确性的问题。
 
@@ -82,7 +82,7 @@ describe('increment', () => {
 
 ### 组合式函数 {#composables}
 
-有一类 Vue 应用中特有的函数被称为 [组合式函数](/guide/reusability/composables.html)，在测试过程中可能需要特殊处理。
+有一类 Vue 应用中特有的函数被称为 [组合式函数](/guide/reusability/composables)，在测试过程中可能需要特殊处理。
 你可以跳转到下方查看 [测试组合式函数](#testing-composables) 了解更多细节。
 
 ### 组件的单元测试 {#unit-testing-components}
@@ -91,21 +91,17 @@ describe('increment', () => {
 
 1. 白盒：单元测试
 
-   白盒测试知晓一个组件的实现细节和依赖关系。它们更专注于将组件进行更 **独立** 的测试。这些测试通常会涉及到模拟一些组件的部分子组件，以及设置插件的状态和依赖性（例如 Vuex）。
+   白盒测试知晓一个组件的实现细节和依赖关系。它们更专注于将组件进行更 **独立** 的测试。这些测试通常会涉及到模拟一些组件的部分子组件，以及设置插件的状态和依赖性（例如 Piana）。
 
 2. 黑盒：组件测试
 
    黑盒测试不知晓一个组件的实现细节。这些测试尽可能少地模拟，以测试组件在整个系统中的集成情况。它们通常会渲染所有子组件，因而会被认为更像一种“集成测试”。请查看下方的[组件测试建议](#component-testing)作进一步了解。
 
-### 推荐 {#recommendation-3}
+### 推荐方案 {#recommendation}
 
 - [Vitest](https://vitest.dev/)
 
-  因为由 `create-vue` 创建的官方项目配置是基于 [Vite](https://vitejs.dev/) 的，所以我们推荐你使用一个可以利用同一套 Vite 配置和转换管道的单元测试框架。[Vitest](https://vitest.dev/) 正是一个针对此目标设计的单元测试框架，它由 Vue / Vite 团队成员开发和维护。在 Vite 的项目集成它会非常简单，而且速度非常快。
-
-:::warning 积极开发中
-Vitest 是一个非常新的项目，仍然在以非常快的速度不断发展中。虽然它暂时还是不稳定的，但团队正在努力使它满足生产环境的需要。
-:::
+  因为由 `create-vue` 创建的官方项目配置是基于 [Vite](https://cn.vitejs.dev/) 的，所以我们推荐你使用一个可以利用同一套 Vite 配置和转换管道的单元测试框架。[Vitest](https://cn.vitest.dev/) 正是一个针对此目标设计的单元测试框架，它由 Vue / Vite 团队成员开发和维护。在 Vite 的项目集成它会非常简单，而且速度非常快。
 
 ### 其他选择 {#other-options}
 
@@ -123,7 +119,7 @@ Vitest 是一个非常新的项目，仍然在以非常快的速度不断发展�
 
 组件测试主要需要关心组件的公开接口而不是内部实现细节。对于大部分的组件来说，公开接口包括触发的事件、prop 和插槽。当进行测试时，请记住，**测试这个组件做了什么，而不是测试它是怎么做到的**。
 
-- **推荐**
+- **推荐的做法**
 
   - 对于 **视图** 的测试：根据输入 prop 和插槽断言渲染输出是否正确。
   - 对于 **交互** 的测试：断言渲染的更新是否正确或触发的事件是否正确地响应了用户输入事件。
@@ -137,13 +133,11 @@ Vitest 是一个非常新的项目，仍然在以非常快的速度不断发展�
 <div class="testing-library-api">
 
 ```js
-render(Stepper, {
+const { getByText } = render(Stepper, {
   props: {
     max: 1
   }
 })
-
-const { getByText } = render(Component)
 
 getByText('0') // 隐式断言 "0" 在这个组件中
 
@@ -201,9 +195,9 @@ cy.get(valueSelector).should('be.visible').and('contain.text', '0')
 
 </TestingApiSwitcher>
 
-- **不推荐**
+- **应避免的做法**
 
-  不推荐去断言一个组件实例的私有状态或测试一个组件的私有方法。测试实现细节会使测试代码太脆弱，因为当实现发生变化时，它们更有可能失败并需要更新重写。
+  不要去断言一个组件实例的私有状态或测试一个组件的私有方法。测试实现细节会使测试代码太脆弱，因为当实现发生变化时，它们更有可能失败并需要更新重写。
 
   组件的最终工作是渲染正确的 DOM 输出，所以专注于 DOM 输出的测试提供了足够的正确性保证（如果你不需要更多其他方面测试的话），同时更加健壮、需要的改动更少。
 
@@ -211,7 +205,7 @@ cy.get(valueSelector).should('be.visible').and('contain.text', '0')
 
   如果一个方法需要测试，把它提取到一个独立的实用函数中，并为它写一个专门的单元测试。如果它不能被直截了当地抽离出来，那么对它的调用应该作为交互测试的一部分。
 
-### 推荐 {#recommendation-2}
+### 推荐方案 {#recommendation-1}
 
 - [Vitest](https://vitest.dev/) 对于组件和组合式函数都采用无头渲染的方式 (例如 VueUse 中的 [`useFavicon`](https://vueuse.org/core/useFavicon/#usefavicon) 函数)。组件和 DOM 都可以通过 [@testing-library/vue](https://testing-library.com/docs/vue-testing-library/intro) 来测试。
 
@@ -219,17 +213,17 @@ cy.get(valueSelector).should('be.visible').and('contain.text', '0')
 
 Vitest 和基于浏览器的运行器之间的主要区别是速度和执行上下文。简而言之，基于浏览器的运行器，如 Cypress，可以捕捉到基于 Node 的运行器（如 Vitest）所不能捕捉的问题（比如样式问题、原生 DOM 事件、Cookies、本地存储和网络故障），但基于浏览器的运行器比 Vitest _慢几个数量级_，因为它们要执行打开浏览器，编译样式表以及其他步骤。Cypress 是一个基于浏览器的运行器，支持组件测试。请阅读 [Vitest 文档的“比较”这一章](https://vitest.dev/guide/comparisons.html#cypress) 了解 Vitest 和 Cypress 最新的比较信息。
 
-### 挂载库 {#mounting-libraries}
+### 组件挂载库 {#mounting-libraries}
 
 组件测试通常涉及到单独挂载被测试的组件，触发模拟的用户输入事件，并对渲染的 DOM 输出进行断言。有一些专门的工具库可以使这些任务变得更简单。
 
 - [`@testing-library/vue`](https://github.com/testing-library/vue-testing-library) 是一个 Vue 的测试库，专注于测试组件而不依赖其他实现细节。因其良好的设计使得代码重构也变得非常容易。它的指导原则是，测试代码越接近软件的使用方式，它们就越值得信赖。
 
-- [`@vue/test-utils`](https://github.com/vuejs/vue-test-utils) 是官方的底层组件测试库，用来提供给用户访问 Vue 特有的 API。`@testing-library/vue` 也是基于此库构建的。
+- [`@vue/test-utils`](https://github.com/vuejs/test-utils) 是官方的底层组件测试库，用来提供给用户访问 Vue 特有的 API。`@testing-library/vue` 也是基于此库构建的。
 
 我们推荐使用 `@testing-library/vue` 测试应用中的组件, 因为它更匹配整个应用的测试优先级。只有在你构建高级组件、并需要测试内部的 Vue 特有 API 时再使用 `@vue/test-utils`。
 
-### 其他选择 {#other-options-2}
+### 其他选择 {#other-options-1}
 
 - [Nightwatch](https://v2.nightwatchjs.org/) 是一个端到端测试运行器，支持 Vue 的组件测试。（Nightwatch v2 版本的 [示例项目](https://github.com/nightwatchjs-community/todo-vue)）
 
@@ -259,29 +253,29 @@ Vitest 和基于浏览器的运行器之间的主要区别是速度和执行上�
 
 #### 更快的反馈 {#faster-feedback-loops}
 
-端到端测试和相应开发过程的主要问题之一是，运行整个套件需要很长的时间。通常情况下，这只在持续集成和部署（CI/CD）管道中进行。现代的端到端测试框架通过增加并行化等功能来帮助解决这个问题，这使得 CI/CD 管道的运行速度比以前快了几倍。此外，在本地开发时，能够有选择地为你正在工作的页面运行单个测试，同时还提供测试的热重载，大大提高了开发人员的工作流程和生产力。
+端到端测试和相应开发过程的主要问题之一是，运行整个套件需要很长的时间。通常情况下，这只在持续集成和部署（CI/CD）管道中进行。现代的端到端测试框架通过增加并行化等功能来帮助解决这个问题，这使得 CI/CD 管道的运行速度比以前快了几倍。此外，在本地开发时，能够有选择地为你正在工作的页面运行单个测试，同时还提供测试的热重载，大大提高了开发者的工作流程和生产力。
 
 #### 第一优先级的调试体验 {#first-class-debugging-experience}
 
-传统上，开发人员依靠扫描终端窗口中的日志来帮助确定测试中出现的问题，而现代端到端测试框架允许开发人员利用他们已经熟悉的工具，例如浏览器开发工具。
+传统上，开发者依靠扫描终端窗口中的日志来帮助确定测试中出现的问题，而现代端到端测试框架允许开发者利用他们已经熟悉的工具，例如浏览器开发工具。
 
 #### 无头模式下的可见性 {#visibility-in-headless-mode}
 
 当端到端测试在 CI/CD 管道中运行时，它们通常在无头浏览器（即不带界面的浏览器）中运行。因此，当错误发生时，现代端到端测试框架的一个关键特性是能够在不同的测试阶段查看应用的快照、视频，从而深入了解错误的原因。而在很早以前，要手动维护这些集成是非常繁琐的。
 
-### 推荐 {#recommendation}
+### 推荐方案 {#recommendation-2}
 
 - [Cypress](https://www.cypress.io/)
 
   总的来说，我们认为 Cypress 提供了最完整的端到端解决方案，其具有信息丰富的图形界面、出色的调试性、内置断言和存根、抗剥落性、并行化和快照等诸多特性。而且如上所述，它还提供对 [组件测试](https://docs.cypress.io/guides/component-testing/introduction) 的支持。不过，它只支持测试基于 Chromium 的浏览器和 Firefox。
 
-### 其他选项 {#other-options-3}
+### 其他选项 {#other-options-2}
 
 - [Playwright](https://playwright.dev/) 也是一个非常好的端到端测试解决方案，支持测试范围更广的浏览器品类（主要是 WebKit 型的）。查看这篇文章 [《为什么选择 Playwright》](https://playwright.dev/docs/why-playwright) 了解更多细节。
 
 - [Nightwatch v2](https://v2.nightwatchjs.org/) 是一个基于 [Selenium WebDriver](https://www.npmjs.com/package/selenium-webdriver) 的端到端测试解决方案。它的浏览器品类支持范围是最广的。
 
-## 使用指南 {#recipes}
+## 用例指南 {#recipes}
 
 ### 添加 Vitest 到项目中 {#adding-vitest-to-a-project}
 
@@ -291,7 +285,7 @@ Vitest 和基于浏览器的运行器之间的主要区别是速度和执行上�
 > npm install -D vitest happy-dom @testing-library/vue
 ```
 
-接着，更新你的 Vite 配置，添加上 `test` 选项块：
+接着，更新你的 Vite 配置，添加上 `test` 选项：
 
 ```js{6-12}
 // vite.config.js
@@ -301,7 +295,7 @@ export default defineConfig({
   // ...
   test: {
     // 启用类似 jest 的全局测试 API
-    global: true,
+    globals: true,
     // 使用 happy-dom 模拟 DOM
     // 这需要你安装 happy-dom 作为对等依赖（peer dependency）
     environment: 'happy-dom'
@@ -316,7 +310,7 @@ export default defineConfig({
 // tsconfig.json
 
 {
- "compileroptions": {
+ "compilerOptions": {
     "types": ["vitest/globals"]
   }
 }
@@ -359,7 +353,7 @@ test('it should work', () => {
 
 ### 测试组合式函数 {#testing-composables}
 
-> 这一小节假设你已经读过了[组合式函数](/guide/reusability/composables.html)这一章。
+> 这一小节假设你已经读过了[组合式函数](/guide/reusability/composables)这一章。
 
 当涉及到测试组合式函数时，我们可以根据是否依赖宿主组件实例把它们分为两类。
 
@@ -368,7 +362,7 @@ test('it should work', () => {
 - 生命周期钩子
 - 供给/注入
 
-如果一个组合式程序只使用响应性 API，那么它可以通过直接调用并断言其返回的状态或方法来进行测试。
+如果一个组合式程序只使用响应式 API，那么它可以通过直接调用并断言其返回的状态或方法来进行测试。
 
 ```js
 // counter.js

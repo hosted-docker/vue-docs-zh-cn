@@ -1,64 +1,57 @@
-<script lang="ts">
-interface Sponsor {
-  url: string
-  img: string
-  name: string
-}
-
-interface SponsorData {
-  special: Sponsor[]
-  platinum: Sponsor[]
-  platinum_china: Sponsor[]
-  gold: Sponsor[]
-  silver: Sponsor[]
-  bronze: Sponsor[]
-}
-
-// shared data across instances so we load only once
-let data = $ref<SponsorData>()
-let pending = false
-
-const base = `https://sponsors.vuejs.org`
-</script>
-
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { SponsorData, data, base, load } from './sponsors'
 
-const { tier, placement = 'aside' } = defineProps<{
-  tier: keyof SponsorData
-  placement?: 'aside' | 'page' | 'landing'
-}>()
+type Placement = 'aside' | 'page' | 'landing'
 
-let container = $ref<HTMLElement>()
-let visible = $ref(false)
+const props = withDefaults(
+  defineProps<{
+    tier: keyof SponsorData
+    placement?: Placement
+  }>(),
+  {
+    placement: 'aside'
+  }
+)
+
+const container = ref<HTMLElement>()
+const visible = ref(false)
 
 onMounted(async () => {
   // only render when entering view
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
-        visible = true
+        visible.value = true
         observer.disconnect()
       }
     },
     { rootMargin: '0px 0px 300px 0px' }
   )
-  observer.observe(container)
+  observer.observe(container.value!)
   onUnmounted(() => observer.disconnect())
 
   // load data
-  if (!pending) {
-    pending = true
-    data = await (await fetch(`${base}/data.json`)).json()
-  }
+  await load()
 })
+
+// fathom events
+const eventMap: Record<Placement, string> = {
+  aside: '4QUPDDRU',
+  landing: '58FLAR2Z',
+  page: 'ZXLO3IUT'
+}
+
+function track(interest?: boolean) {
+  fathom.trackGoal(interest ? `Y2BVYNT2` : eventMap[props.placement], 0)
+}
 </script>
 
 <template>
   <div
     ref="container"
     class="sponsor-container"
-    :class="[tier.startsWith('plat') ? 'platinum' : tier, placement]"
+    :class="[tier === 'platinum_china' ? 'special' : tier, placement]"
   >
     <template v-if="data && visible">
       <a
@@ -67,6 +60,7 @@ onMounted(async () => {
         :href="url"
         target="_blank"
         rel="sponsored noopener"
+        @click="track()"
       >
         <picture v-if="img.endsWith('png')">
           <source
@@ -82,7 +76,8 @@ onMounted(async () => {
       v-if="placement !== 'page' && tier !== 'special'"
       href="/sponsor/"
       class="sponsor-item action"
-      >Your logo</a
+      @click="track(true)"
+      >成为赞助商</a
     >
   </div>
 </template>
@@ -163,7 +158,7 @@ onMounted(async () => {
 }
 .aside .special .sponsor-item {
   width: 100%;
-  height: 60px;
+  height: 70px;
 }
 .aside .special .sponsor-item img {
   width: 120px;

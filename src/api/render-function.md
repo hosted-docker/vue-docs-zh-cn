@@ -1,4 +1,4 @@
-# 渲染函数 API {#render-function-APIs}
+# 渲染函数 API {#render-function-apis}
 
 ## h() {#h}
 
@@ -93,11 +93,11 @@
   })
   ```
 
-- **参考**：[指南——渲染函数——创建 VNode](/guide/extras/render-function.html#creating-vnodes)
+- **参考**：[指南 - 渲染函数 - 创建 VNode](/guide/extras/render-function#creating-vnodes)
 
 ## mergeProps() {#mergeprops}
 
-合并多个 prop 对象，用于处理含有特定的 prop 参数的情况。
+合并多个 props 对象，用于处理含有特定的 props 参数的情况。
 
 - **类型**
 
@@ -107,7 +107,7 @@
 
 - **详细信息**
 
-  `mergeProps()` 支持以下特定 prop 参数的处理，将它们合并成一个对象。
+  `mergeProps()` 支持以下特定 props 参数的处理，将它们合并成一个对象。
 
   - `class`
   - `style`
@@ -155,7 +155,7 @@
 
   Vnode 被认为是一旦创建就不能修改的，你不应该修改已创建的 vnode 的 prop，而应该附带不同的/额外的 prop 来克隆它。
 
-  Vnode 具有特殊的内部 property，因此克隆它并不像 object spread 一样简单。`cloneVNode()` 处理了大部分这样的内部逻辑。
+  Vnode 具有特殊的内部属性，因此克隆它并不像 object spread 一样简单。`cloneVNode()` 处理了大部分这样的内部逻辑。
 
 - **示例**
 
@@ -228,7 +228,7 @@
 
   </div>
 
-- **参考**：[指南 - 渲染函数 - 组件](/guide/extras/render-function.html#components)
+- **参考**：[指南 - 渲染函数 - 组件](/guide/extras/render-function#components)
 
 ## resolveDirective() {#resolvedirective}
 
@@ -248,7 +248,7 @@
 
   如果指令没有找到，会抛出一个运行时警告，并返回 `undefined`。
 
-- **参考**：[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function.html#custom-directives)
+- **参考**：[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function#custom-directives)
 
 ## withDirectives() {#withdirectives}
 
@@ -296,11 +296,11 @@
   ])
   ```
 
-- **参考**：[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function.html#custom-directives)
+- **参考**：[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function#custom-directives)
 
 ## withModifiers() {#withmodifiers}
 
-用于向事件处理函数添加内置 [`v-on` 修饰符](/guide/essentials/event-handling.html#event-modifiers)。
+用于向事件处理函数添加内置 [`v-on` 修饰符](/guide/essentials/event-handling#event-modifiers)。
 
 - **类型**
 
@@ -321,4 +321,4 @@
   })
   ```
 
-- **参考**：[指南 - 渲染函数 - 事件修饰符](/guide/extras/render-function.html#event-modifiers)
+- **参考**：[指南 - 渲染函数 - 事件修饰符](/guide/extras/render-function#event-modifiers)

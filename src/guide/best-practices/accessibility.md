@@ -15,7 +15,7 @@ Web 无障碍访问 (也称为 a11y) 是指创建可供任何人使用的网站�
 ```vue-html
 <ul class="skip-links">
   <li>
-    <a href="#main" ref="skipLink">Skip to main content</a>
+    <a href="#main" ref="skipLink" class="skip-link">Skip to main content</a>
   </li>
 </ul>
 ```
@@ -23,7 +23,7 @@ Web 无障碍访问 (也称为 a11y) 是指创建可供任何人使用的网站�
 若想在非聚焦状态下隐藏该链接，可以添加以下样式：
 
 ```css
-.skipLink {
+.skip-link {
   white-space: nowrap;
   margin: 1em auto;
   top: 0;
@@ -32,7 +32,7 @@ Web 无障碍访问 (也称为 a11y) 是指创建可供任何人使用的网站�
   margin-left: -72px;
   opacity: 0;
 }
-.skipLink:focus {
+.skip-link:focus {
   opacity: 1;
   background-color: white;
   padding: 0.5em;
@@ -40,7 +40,7 @@ Web 无障碍访问 (也称为 a11y) 是指创建可供任何人使用的网站�
 }
 ```
 
-一旦用户改变路由，请将焦点放回到这个“跳过”链接。通过如下方式聚焦“跳过”链接的模板 ref (假设使用了 `vue-router`) 即可实现：
+一旦用户改变路由，请将焦点放回到这个“跳过”链接。通过如下方式聚焦“跳过”链接的模板引用 (假设使用了 `vue-router`) 即可实现：
 
 <div class="options-api">
 
@@ -82,11 +82,11 @@ watch(
 
 ## 内容结构 {#content-structure}
 
-确保设计可以支持易于访问的实现是无障碍访问最重要的部分之一。设计不仅要考虑颜色对比度、字体选择、文本大小和语言，还要考虑应用程序中的内容是如何组织的。
+确保设计可以支持易于访问的实现是无障碍访问最重要的部分之一。设计不仅要考虑颜色对比度、字体选择、文本大小和语言，还要考虑应用中的内容是如何组织的。
 
 ### 标题 {#headings}
 
-用户可以通过标题在应用程序中进行导航。为应用程序的每个部分设置描述性标题，这可以让用户更容易地预测每个部分的内容。说到标题，有几个推荐的无障碍访问实践：
+用户可以通过标题在应用中进行导航。为应用的每个部分设置描述性标题，这可以让用户更容易地预测每个部分的内容。说到标题，有几个推荐的无障碍访问实践：
 
 - 按级别顺序嵌套标题：`<h1>` - `<h6>`
 - 不要在一个章节内跳跃标题的级别
@@ -97,13 +97,13 @@ watch(
 ```vue-html
 <main role="main" aria-labelledby="main-title">
   <h1 id="main-title">Main title</h1>
-  <section aria-labelledby="section-title">
-    <h2 id="section-title"> Section Title </h2>
+  <section aria-labelledby="section-title-1">
+    <h2 id="section-title-1"> Section Title </h2>
     <h3>Section Subtitle</h3>
     <!-- 内容 -->
   </section>
-  <section aria-labelledby="section-title">
-    <h2 id="section-title"> Section Title </h2>
+  <section aria-labelledby="section-title-2">
+    <h2 id="section-title-2"> Section Title </h2>
     <h3>Section Subtitle</h3>
     <!-- 内容 -->
     <h3>Section Subtitle</h3>
@@ -112,9 +112,9 @@ watch(
 </main>
 ```
 
-### Landmark {#landmarks}
+### Landmarks {#landmarks}
 
-[Landmark](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role) 会为应用中的章节提供访问规划。依赖辅助技术的用户可以跳过内容直接导航到应用程序的每个部分。你可以使用 [ARIA role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles) 帮助你实现这个目标。
+[Landmark](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role) 会为应用中的章节提供访问规划。依赖辅助技术的用户可以跳过内容直接导航到应用的每个部分。你可以使用 [ARIA role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles) 帮助你实现这个目标。
 
 | HTML            | ARIA Role            | 地标的目的 |
 | --------------- | -------------------- | --------- |
@@ -129,7 +129,7 @@ watch(
 
 
 :::tip 提示：
-在使用地标 HTML 元素时，建议加上冗余的地标 role attribute，以最大限度地与传统[不支持 HTML5 语义元素的浏览器兼容](https://caniuse.com/#feat=html5semantic)。
+建议同时使用 landmark HTML 元素和 role 属性，以最大程度地兼容[不支持 HTML5 语义元素的传统浏览器](https://caniuse.com/#feat=html5semantic)。
 :::
 
 [阅读更多有关标题的细节](https://www.w3.org/TR/wai-aria-1.2/#landmark_roles)
@@ -278,6 +278,8 @@ watch(
 
 占位符的缺陷之一是默认情况下它们不符合[颜色对比度标准](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)；应当修改其颜色，让它看起来像是预先填入 input 框中的数据一样。查看以下示例，可以看到满足颜色对比度条件的姓氏占位符看起来像预填充的数据：
 
+![可访问的占位文本](./images/AccessiblePlaceholder.png)
+
 ```vue-html
 <form
   class="demo"
@@ -299,7 +301,25 @@ watch(
 </form>
 ```
 
-<!-- <common-codepen-snippet title="Form Placeholder" slug="ExZvvMw" :height="265" tab="js,result" theme="light" :preview="false" :editable="false" /> -->
+```css
+/* https://www.w3schools.com/howto/howto_css_placeholder.asp */
+
+#lastName::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
+  opacity: 1; /* Firefox */
+}
+
+#lastName:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: black;
+}
+
+#lastName::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: black;
+}
+```
 
 最好在表单外提供所有用户需要填写输入的信息。
 
@@ -368,9 +388,9 @@ watch(
 
 <!-- <common-codepen-snippet title="Form Search" slug="QWdMqWy" :height="265" tab="js,result" theme="light" :preview="false" :editable="false" /> -->
 
-#### `aria-hidden="true"` {#aria-hiddentrue}
+#### `aria-hidden="true"` {#aria-hidden-true}
 
-添加 `aria-hidden="true"` 在无障碍访问时被隐藏，但对其他可视用户仍然是可见的。不要在可聚焦的元素上使用它，请只在装饰性的、重复的的或屏幕外的内容上使用它。
+添加 `aria-hidden="true"` 在无障碍访问时被隐藏，但对其他可视用户仍然是可见的。不要在可聚焦的元素上使用它，请只在装饰性的、重复的或屏幕外的内容上使用它。
 
 ```vue-html
 <p>This is not hidden from screen readers.</p>
@@ -447,7 +467,7 @@ watch(
 
 [WCAG 2.1](https://www.w3.org/TR/WCAG21/) 继承自 [WCAG 2.0](https://www.w3.org/TR/WCAG20/)，接纳 Web 演进过程中的新技术。W3C 鼓励在开发或更新 Web 无障碍访问策略时使用 WCAG 的最新版本。
 
-#### WCAG 2.1 2.1 四大指导原则 (缩写 POUR)：{#wcag-21-four-main-guiding-principles-abbreviated-as-pour}
+#### WCAG 2.1 四大指导原则 (缩写 POUR)：{#wcag-2-1-four-main-guiding-principles-abbreviated-as-pour}
 
 - [可感知性](https://www.w3.org/TR/WCAG21/#perceivable)
   - 用户必须能够感知所渲染的信息
@@ -458,11 +478,11 @@ watch(
 - [健壮性](https://www.w3.org/TR/WCAG21/#robust)
   - 随着技术的进步，用户必须能够访问内容
 
-#### Web 无障碍倡议 – 无障碍访问丰富的互联网应用程序 (WAI-ARIA) {#web-accessibility-initiative-accessible-rich-internet-applications-wai-aria}
+#### Web 无障碍倡议 – 无障碍访问丰富的互联网应用 (WAI-ARIA) {#web-accessibility-initiative-–-accessible-rich-internet-applications-wai-aria}
 
 W3C 的 WAI-ARIA 为如何构建动态内容和高阶用户界面控件提供了指导。
 
-- [可便捷访问的丰富互联网应用程序 (WAI-ARIA) 1.2](https://www.w3.org/TR/wai-aria-1.2/)
+- [可便捷访问的丰富互联网应用 (WAI-ARIA) 1.2](https://www.w3.org/TR/wai-aria-1.2/)
 - [WAI-ARIA 实践 1.2](https://www.w3.org/TR/wai-aria-practices-1.2/)
 
 ## 资源 {#resources}
@@ -491,6 +511,7 @@ W3C 的 WAI-ARIA 为如何构建动态内容和高阶用户界面控件提供了
 - 自动化相关的工具
   - [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk)
   - [WAVE](https://chrome.google.com/webstore/detail/wave-evaluation-tool/jbbplnpkjmmeebjpijfedlgcdilocofh)
+  - [ARC Toolkit](https://chrome.google.com/webstore/detail/arc-toolkit/chdkkkccnlfncngelccgbgfmjebmkmce?hl=en-US)
 - 颜色相关的工具
   - [WebAim Color Contrast](https://webaim.org/resources/contrastchecker/)
   - [WebAim Link Color Contrast](https://webaim.org/resources/linkcontrastchecker)
@@ -499,10 +520,12 @@ W3C 的 WAI-ARIA 为如何构建动态内容和高阶用户界面控件提供了
   - [Color Oracle](https://colororacle.org)
   - [Focus Indicator](https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebmfebjccbhmccmaoedlf?hl=en-US…)
   - [NerdeFocus](https://chrome.google.com/webstore/detail/nerdefocus/lpfiljldhgjecfepfljnbjnbjfhennpd?hl=en-US…)
+  - [Visual Aria](https://chrome.google.com/webstore/detail/visual-aria/lhbmajchkkmakajkjenkchhnhbadmhmk?hl=en-US)
+  - [Silktide Website Accessibility Simulator](https://chrome.google.com/webstore/detail/silktide-website-accessib/okcpiimdfkpkjcbihbmhppldhiebhhaf?hl=en-US)
 
 ### 用户 {#users}
 
-世界卫生组织估计，全世界 15% 的人口患有某种形式的残疾，其中约 2 - 4% 的人严重残疾。估计全世界有 10 亿残障人士，它们是世界上最大的少数群体。
+世界卫生组织估计，全世界 15% 的人口患有某种形式的残疾，其中约 2 - 4% 的人严重残疾。估计全世界有 10 亿残障人士，他们是世界上最大的少数群体。
 
 残疾的种类繁多，大致可分为以下四类：
 

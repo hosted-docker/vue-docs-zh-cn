@@ -1,8 +1,8 @@
 # 单文件组件 CSS 功能 {#sfc-css-features}
 
-## CSS 作用域 {#scoped-css}
+## 组件作用域 CSS {#scoped-css}
 
-当 `<style>` 标签带有 `scoped` attribute 的时候，它的 CSS 只会应用到当前组件的元素上。这类似于 Shadow DOM 中的样式封装。它带有一些注意事项，不过好处是不需要任何的 polyfill。它的实现方式是通过 PostCSS 将以下内容：
+当 `<style>` 标签带有 `scoped` attribute 的时候，它的 CSS 只会影响当前组件的元素，和 Shadow DOM 中的样式封装类似。使用时有一些注意事项，不过好处是不需要任何的 polyfill。它的实现方式是通过 PostCSS 将以下内容：
 
 ```vue
 <style scoped>
@@ -96,7 +96,7 @@
 </style>
 ```
 
-### 作用域样式提示 {#scoped-style-tips}
+### 作用域样式须知 {#scoped-style-tips}
 
 - **作用域样式并没有消除对 class 的需求**。由于浏览器渲染各种各样 CSS 选择器的方式，`p { color: red }` 结合作用域样式使用时 (即当与 attribute 选择器组合的时候) 会慢很多倍。如果你使用 class 或者 id 来替代，例如 `.example { color: red }`，那你几乎就可以避免性能的损失。
 
@@ -124,7 +124,7 @@
 
 ### 自定义注入名称 {#custom-inject-name}
 
-你可以通过给 `module` attribute 一个值来自定义注入 class 对象的 property 键：
+你可以通过给 `module` attribute 一个值来自定义注入 class 对象的属性名：
 
 ```vue
 <template>
@@ -146,10 +146,10 @@
 import { useCssModule } from 'vue'
 
 // 在 setup() 作用域中...
-// 默认情况下, 返回 <style module> 的 class 
+// 默认情况下, 返回 <style module> 的 class
 useCssModule()
 
-// 具名情况下, 返回 <style module="classes"> 的 class 
+// 具名情况下, 返回 <style module="classes"> 的 class
 useCssModule('classes')
 ```
 
@@ -199,4 +199,4 @@ p {
 </style>
 ```
 
-实际的值会被编译成哈希化的 CSS 自定义 property，因此 CSS 本身仍然是静态的。自定义 property 会通过内联样式的方式应用到组件的根元素上，并且在源值变更的时候响应式地更新。
+实际的值会被编译成哈希化的 CSS 自定义属性，因此 CSS 本身仍然是静态的。自定义属性会通过内联样式的方式应用到组件的根元素上，并且在源值变更的时候响应式地更新。

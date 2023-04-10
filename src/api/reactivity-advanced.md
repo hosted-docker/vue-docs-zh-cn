@@ -1,8 +1,8 @@
-# 响应性 API：进阶 {#reactivity-api-advanced}
+# 响应式 API：进阶 {#reactivity-api-advanced}
 
 ## shallowRef() {#shallowref}
 
-[`ref()`](./reactivity-core.html#ref) 的浅层作用形式。
+[`ref()`](./reactivity-core#ref) 的浅层作用形式。
 
 - **类型**
 
@@ -33,8 +33,8 @@
   ```
 
 - **参考：**
-  - [指南 - 减少大型不可变结构的响应性开销](/guide/best-practices/performance.html#reduce-reactivity-overhead-for-large-immutable-structures)
-  - [指南 - 与其他状态系统集成](/guide/extras/reactivity-in-depth.html#integration-with-external-state-systems)
+  - [指南 - 减少大型不可变结构的响应性开销](/guide/best-practices/performance#reduce-reactivity-overhead-for-large-immutable-structures)
+  - [指南 - 与其他状态系统集成](/guide/extras/reactivity-in-depth#integration-with-external-state-systems)
 
 ## triggerRef() {#triggerref}
 
@@ -133,7 +133,7 @@
 
 ## shallowReactive() {#shallowreactive}
 
-[`reactive()`](./reactivity-core.html#reactive) 的浅层作用形式。
+[`reactive()`](./reactivity-core#reactive) 的浅层作用形式。
 
 - **类型**
 
@@ -143,7 +143,7 @@
 
 - **详细信息**
 
-  和 `reactive()` 不同，这里没有深层级的转换：一个浅层响应式对象里只有根级别的 property 是响应式的。property 的值会被原样存储和暴露，这也意味着值为 ref 的 property **不会**被自动解包了。
+  和 `reactive()` 不同，这里没有深层级的转换：一个浅层响应式对象里只有根级别的属性是响应式的。属性的值会被原样存储和暴露，这也意味着值为 ref 的属性**不会**被自动解包了。
 
   :::warning 谨慎使用
   浅层数据结构应该只用于组件中的根级状态。请避免将其嵌套在深层次的响应式对象中，因为它创建的树具有不一致的响应行为，这可能很难理解和调试。
@@ -171,7 +171,7 @@
 
 ## shallowReadonly() {#shallowreadonly}
 
-[`readonly()`](./reactivity-core.html#readonly) 的浅层作用形式
+[`readonly()`](./reactivity-core#readonly) 的浅层作用形式
 
 - **类型**
 
@@ -181,7 +181,7 @@
 
 - **详细信息**
 
-  和 `readonly()` 不同，这里没有深层级的转换：只有根层级的 property 变为了只读。property 的值都会被原样存储和暴露，这也意味着值为 ref 的 property **不会**被自动解包了。
+  和 `readonly()` 不同，这里没有深层级的转换：只有根层级的属性变为了只读。属性的值都会被原样存储和暴露，这也意味着值为 ref 的属性**不会**被自动解包了。
 
   :::warning 谨慎使用
   浅层数据结构应该只用于组件中的根级状态。请避免将其嵌套在深层次的响应式对象中，因为它创建的树具有不一致的响应行为，这可能很难理解和调试。
@@ -219,7 +219,7 @@
 
 - **详细信息**
 
-  `toRaw()` 可以返回由 [`reactive()`](./reactivity-core.html#reactive)、[`readonly()`](./reactivity-core.html#readonly)、[`shallowReactive()`](#shallowreactive) 或者 [`shallowReadonly()`](#shallowreadonly) 创建的代理对应的原始对象。
+  `toRaw()` 可以返回由 [`reactive()`](./reactivity-core#reactive)、[`readonly()`](./reactivity-core#readonly)、[`shallowReactive()`](#shallowreactive) 或者 [`shallowReadonly()`](#shallowreadonly) 创建的代理对应的原始对象。
 
   这是一个可以用于临时读取而不引起代理访问/跟踪开销，或是写入而不触发更改的特殊方法。不建议保存对原始对象的持久引用，请谨慎使用。
 
@@ -260,7 +260,7 @@
 
   - 当呈现带有不可变数据源的大型列表时，跳过代理转换可以提高性能。
 
-  这应该是一种进阶需求，因为只在根层访问能到原始值，所以如果把一个嵌套的、没有标记的原始对象设置成一个响应式对象，然后再次访问它，你获取到的是代理的版本。这可能会导致**识别风险**，即执行一个依赖于对象标识的操作，但同时使用同一对象的原始版本和代理版本：
+  这应该是一种进阶需求，因为只在根层访问能到原始值，所以如果把一个嵌套的、没有标记的原始对象设置成一个响应式对象，然后再次访问它，你获取到的是代理的版本。这可能会导致**对象身份风险**，即执行一个依赖于对象身份的操作，但却同时使用了同一对象的原始版本和代理版本：
 
   ```js
   const foo = markRaw({

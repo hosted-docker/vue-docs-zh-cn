@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import NewsLetter from './NewsLetter.vue'
-import SponsorsGroup from './SponsorsGroup.vue';
+import { onMounted } from 'vue'
+import SiteMap from './SiteMap.vue'
+// import NewsLetter from './NewsLetter.vue'
+import { load, data, base } from './sponsors'
+import SponsorsGroup from './SponsorsGroup.vue'
 // NOTE: hide the home video
 // https://github.com/vuejs-translations/docs-zh-cn/issues/177
-// import VueMasteryModal from './VueMasteryModal.vue';
+// import VueMasteryModal from './VueMasteryModal.vue'
+
+onMounted(async () => {
+  await load()
+})
 </script>
 
 <template>
@@ -13,13 +20,13 @@ import SponsorsGroup from './SponsorsGroup.vue';
       <br />JavaScript 框架
     </h1>
     <p class="description">
-      一款用于构建 Web 界面，易学易用，性能出色且功能丰富的框架。
+      易学易用，性能出色，适用场景丰富的 Web 前端框架。
     </p>
     <p class="actions">
       <!-- NOTE: hide the home video -->
-      <!-- <vue-mastery-modal /> -->
+      <!-- <VueMasteryModal /> -->
       <a class="get-started" href="/guide/introduction.html">
-        快速开始
+        快速上手
         <svg
           class="icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -36,40 +43,69 @@ import SponsorsGroup from './SponsorsGroup.vue';
     </p>
   </section>
 
-  <!-- TODO make dynamic based on data -->
   <section id="special-sponsor">
-    <span>特别赞助</span>
-    <a href="https://www.dcloud.io/hbuilderx.html?hmsr=vue-en&hmpl=&hmcu=&hmkw=&hmci=">
-      <picture>
-        <source type="image/avif" srcset="/images/sponsors/hbuilder.avif" />
-        <img
-          alt="hbuilder logo"
-          width="97"
-          height="36"
-          src="/images/sponsors/hbuilder.png"
-        />
-      </picture>
-    </a>
-    <span>为 Vue 打造的先进 IDE</span>
+    <template v-if="data && data.platinum_china">
+      <span>中国区铂金赞助</span>
+      <template
+        v-for="{
+          url,
+          img,
+          name,
+          height,
+          description
+        } of data.platinum_china"
+      >
+        <a
+          class="logo"
+          :href="url"
+          target="_blank"
+          rel="sponsored noopener"
+        >
+          <picture v-if="img.endsWith('png')">
+            <source
+              type="image/avif"
+              :srcset="`${base}/images/${img.replace(/\.png$/, '.avif')}`"
+            />
+            <img
+              :src="`${base}/images/${img}`"
+              :alt="name"
+              :style="{ height: height || '50px' }"
+            />
+          </picture>
+          <img
+            width="168"
+            height="42"
+            v-else
+            :src="`${base}/images/${img}`"
+            :alt="name"
+          />
+        </a>
+        <a :href="url" target="_blank" rel="sponsored noopener">{{
+          description
+        }}</a>
+      </template>
+    </template>
+    <a v-else-if="data" class="lead" href="/sponsor/"
+      >中国区铂金赞助位 点击了解更多</a
+    >
   </section>
 
   <section id="highlights" class="vt-box-container">
     <div class="vt-box">
       <h2>易学易用</h2>
       <p>
-        基于标准 HTML、CSS 和 JavaScript 构建，拥有直观的 API 和世界一流的文档。
+        基于标准 HTML、CSS 和 JavaScript 构建，提供容易上手的 API
+        和一流的文档。
       </p>
     </div>
     <div class="vt-box">
       <h2>性能出色</h2>
-      <p>
-        经过编译器优化、完全响应式的渲染系统，几乎不需要手动优化。
-      </p>
+      <p>经过编译器优化、完全响应式的渲染系统，几乎不需要手动优化。</p>
     </div>
     <div class="vt-box">
-      <h2>功能丰富</h2>
+      <h2>灵活多变</h2>
       <p>
-        拥有丰富的、可渐进式集成的生态系统，可以根据规模在仅使用一个库和使用整套框架间切换自如。
+        丰富的、可渐进式集成的生态系统，可以根据应用规模在库和框架间切换自如。
       </p>
     </div>
   </section>
@@ -81,7 +117,8 @@ import SponsorsGroup from './SponsorsGroup.vue';
     <SponsorsGroup tier="gold" placement="landing" />
   </section>
 
-  <NewsLetter />
+  <SiteMap />
+  <!-- <NewsLetter /> -->
 </template>
 
 <style scoped>
@@ -167,7 +204,6 @@ html:not(.dark) .accent,
   background-color: var(--vt-c-gray-dark-3);
 }
 
-
 /* NOTE: via #vuemastery-action in VueMasteryModal.vue */
 
 .actions .get-started {
@@ -202,21 +238,37 @@ html:not(.dark) .accent,
   border-top: 1px solid var(--vt-c-divider-light);
   border-bottom: 1px solid var(--vt-c-divider-light);
   padding: 12px 24px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  height: 76px;
 }
 
-#special-sponsor span {
+#special-sponsor span,
+#special-sponsor a {
   color: var(--vt-c-text-2);
   font-weight: 500;
   font-size: 13px;
   vertical-align: middle;
-  margin: 0 24px;
+  flex: 1;
 }
 
-#special-sponsor img {
-  display: inline-block;
-  vertical-align: middle;
-  height: 36px;
+#special-sponsor a:hover {
+  color: var(--vt-c-green);
+}
+
+#special-sponsor span:first-child {
+  text-align: right;
+}
+
+#special-sponsor .logo {
+  flex: unset;
+  display: flex;
+  justify-content: center;
+  padding: 0 30px;
+}
+
+#special-sponsor {
+  justify-content: center;
 }
 
 .dark #special-sponsor img {
@@ -282,15 +334,22 @@ html:not(.dark) .accent,
 
 @media (max-width: 576px) {
   #hero {
-    padding: 64px 32px;
+    padding: 56px 32px;
   }
   .description {
     font-size: 16px;
     margin: 18px 0 30px;
   }
+  #special-sponsor {
+    flex-direction: column;
+    height: auto;
+  }
   #special-sponsor img {
-    display: block;
-    margin: 2px auto 1px;
+    height: 36px;
+    margin: 8px 0;
+  }
+  #special-sponsor span {
+    text-align: center !important;
   }
   #highlights h3 {
     margin-bottom: 0.6em;
@@ -299,7 +358,7 @@ html:not(.dark) .accent,
     padding: 20px 36px;
   }
   .actions a {
-    margin: 0.5em 0;
+    margin: 18px 0;
   }
 }
 

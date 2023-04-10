@@ -1,7 +1,7 @@
 # 组合式 API：生命周期钩子 {#composition-api-lifecycle-hooks}
 
 :::info 使用方式注意
-所有罗列在本页的 API 都应该在组件的 `setup()` 阶段被同步调用。相关细节请看[指南 - 生命周期钩子](/guide/essentials/lifecycle.html)。
+所有罗列在本页的 API 都应该在组件的 `setup()` 阶段被同步调用。相关细节请看[指南 - 生命周期钩子](/guide/essentials/lifecycle)。
 :::
 
 ## onMounted() {#onmounted}
@@ -22,13 +22,13 @@
 
   - 其自身的 DOM 树已经创建完成并插入了父容器中。注意仅当根容器在文档中时，才可以保证组件 DOM 树也在文档中。
 
-  这个钩子通常用于执行需要访问组件所渲染的 DOM 树相关的副作用，或是在[服务端渲染应用](/guide/scaling-up/ssr.html)中用于约束给客户端的 DOM 相关代码。
+  这个钩子通常用于执行需要访问组件所渲染的 DOM 树相关的副作用，或是在[服务端渲染应用](/guide/scaling-up/ssr)中用于确保 DOM 相关代码仅在客户端执行。
 
   **这个钩子在服务器端渲染期间不会被调用。**
 
 - **示例**
 
-  通过模板 ref 访问一个元素：
+  通过模板引用访问一个元素：
 
   ```vue
   <script setup>
@@ -60,7 +60,7 @@
 
   父组件的更新钩子将在其子组件的更新钩子之后调用。
 
-  这个钩子会在组件的任意 DOM 更新后被调用，这些更新可能是由不同的状态变更导致的。如果你需要在某个特定的状态更改后访问更新后的 DOM，请使用 [nextTick()](/api/general.html#nexttick) 作为替代。
+  这个钩子会在组件的任意 DOM 更新后被调用，这些更新可能是由不同的状态变更导致的。如果你需要在某个特定的状态更改后访问更新后的 DOM，请使用 [nextTick()](/api/general#nexttick) 作为替代。
 
   **这个钩子在服务器端渲染期间不会被调用。**
 
@@ -206,23 +206,23 @@
 
   这个钩子带有三个实参：错误对象、触发该错误的组件实例，以及一个说明错误来源类型的信息字符串。
 
-  你可以在 `errorCaptured()` 中更改组件状态来为用户显示一个错误状态。然而重要的是，不要让错误状态渲染为导致本次错误的内容，否则组件就会进入无限的渲染循环中。
+  你可以在 `errorCaptured()` 中更改组件状态来为用户显示一个错误状态。注意不要让错误状态再次渲染导致本次错误的内容，否则组件会陷入无限循环。
 
-  这个钩子可以通过返回 `false` 来阻止错误继续传递。请看下方的传递细节介绍。
+  这个钩子可以通过返回 `false` 来阻止错误继续向上传递。请看下方的传递细节介绍。
 
-  **错误传播规则**
+  **错误传递规则**
 
-  - 默认情况下，所有的错误都会被发送到应用级的 [`app.config.errorHandler`](/api/application.html#app-config-errorhandler) (前提是这个函数已经定义)，这样这些错误都能在一个统一的地方报告给分析服务。
+  - 默认情况下，所有的错误都会被发送到应用级的 [`app.config.errorHandler`](/api/application#app-config-errorhandler) (前提是这个函数已经定义)，这样这些错误都能在一个统一的地方报告给分析服务。
 
-  - 如果组件的继承链或组件链上存在多个 `errorCaptured` 钩子，对于同一个错误，这些钩子都会被调用。
+  - 如果组件的继承链或组件链上存在多个 `errorCaptured` 钩子，对于同一个错误，这些钩子会被按从底至上的顺序一一调用。这个过程被称为“向上传递”，类似于原生 DOM 事件的冒泡机制。
 
   - 如果 `errorCaptured` 钩子本身抛出了一个错误，那么这个错误和原来捕获到的错误都将被发送到 `app.config.errorHandler`。
 
-  - `errorCaptured` 钩子可以通过返回 `false` 来阻止错误继续传递。即表示“这个错误已经被处理了，应当被忽略”，它将阻止其他的 `errorCaptured` 钩子或 `app.config.errorHandler` 因这个错误而被调用。
+  - `errorCaptured` 钩子可以通过返回 `false` 来阻止错误继续向上传递。即表示“这个错误已经被处理了，应当被忽略”，它将阻止其他的 `errorCaptured` 钩子或 `app.config.errorHandler` 因这个错误而被调用。
 
 ## onRenderTracked() <sup class="vt-badge dev-only" /> {#onrendertracked}
 
-注册一个调试钩子，当响应式依赖被组件的渲染作用追踪后调用。
+注册一个调试钩子，当组件渲染过程中追踪到响应式依赖时调用。
 
 **这个钩子仅在开发模式下可用，且在服务器端渲染期间不会被调用。**
 
@@ -241,11 +241,11 @@
   }
   ```
 
-- **参考**：[Reactivity in Depth](/guide/extras/reactivity-in-depth.html)
+- **参考**：[Reactivity in Depth](/guide/extras/reactivity-in-depth)
 
 ## onRenderTriggered() <sup class="vt-badge dev-only" /> {#onrendertriggered}
 
-注册一个调试钩子，当响应式依赖触发了组件渲染作用的运行之后调用。
+注册一个调试钩子，当响应式依赖的变更触发了组件渲染时调用。
 
 **这个钩子仅在开发模式下可用，且在服务器端渲染期间不会被调用。**
 
@@ -267,11 +267,11 @@
   }
   ```
 
-- **参考**：[Reactivity in Depth](/guide/extras/reactivity-in-depth.html)
+- **参考**：[Reactivity in Depth](/guide/extras/reactivity-in-depth)
 
 ## onActivated() {#onactivated}
 
-注册一个回调函数，若组件实例是 [`<KeepAlive>`](/api/built-in-components.html#keepalive) 缓存树的一部分，当组件被插入到 DOM 中时调用。
+注册一个回调函数，若组件实例是 [`<KeepAlive>`](/api/built-in-components#keepalive) 缓存树的一部分，当组件被插入到 DOM 中时调用。
 
 **这个钩子在服务器端渲染期间不会被调用。**
 
@@ -281,11 +281,11 @@
   function onActivated(callback: () => void): void
   ```
 
-- **参考**：[指南 - 缓存实例的生命周期](/guide/built-ins/keep-alive.html#lifecycle-of-cached-instance)
+- **参考**：[指南 - 缓存实例的生命周期](/guide/built-ins/keep-alive#lifecycle-of-cached-instance)
 
 ## onDeactivated() {#ondeactivated}
 
-注册一个回调函数，若组件实例是 [`<KeepAlive>`](/api/built-in-components.html#keepalive) 缓存树的一部分，当组件从 DOM 中被移除时调用。
+注册一个回调函数，若组件实例是 [`<KeepAlive>`](/api/built-in-components#keepalive) 缓存树的一部分，当组件从 DOM 中被移除时调用。
 
 **这个钩子在服务器端渲染期间不会被调用。**
 
@@ -295,7 +295,7 @@
   function onDeactivated(callback: () => void): void
   ```
 
-- **参考**：[Guide - 缓存实例的生命周期](/guide/built-ins/keep-alive.html#lifecycle-of-cached-instance)
+- **参考**：[Guide - 缓存实例的生命周期](/guide/built-ins/keep-alive#lifecycle-of-cached-instance)
 
 ## onServerPrefetch() <sup class="vt-badge" data-text="SSR only" /> {#onserverprefetch}
 
@@ -338,4 +338,4 @@
   </script>
   ```
 
-- **参考**：[服务端渲染](/guide/scaling-up/ssr.html)
+- **参考**：[服务端渲染](/guide/scaling-up/ssr)

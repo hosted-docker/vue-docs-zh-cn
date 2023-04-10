@@ -1,14 +1,14 @@
 # 组件实例 {#component-instance}
 
 :::info
-本页文档描述了组件公共实例 (即 `this`) 上暴露的内置 property 和方法，
+本页文档描述了组件公共实例 (即 `this`) 上暴露的内置属性和方法，
 
-本页罗列的所有 property，除了 `$data` 下的嵌套 property 之外，都是只读的。
+本页罗列的所有属性，除了 `$data` 下的嵌套属性之外，都是只读的。
 :::
 
 ## $data {#data}
 
-从 [`data`](./options-state.html#data) 选项函数中返回的对象，会被组件赋为响应式。组件实例将会代理对其数据对象的 property 访问。
+从 [`data`](./options-state#data) 选项函数中返回的对象，会被组件赋为响应式。组件实例将会代理对其数据对象的属性访问。
 
 - **类型**
 
@@ -20,7 +20,7 @@
 
 ## $props {#props}
 
-表示组件当前已解析的 prop 对象。
+表示组件当前已解析的 props 对象。
 
 - **类型**
 
@@ -32,7 +32,7 @@
 
 - **详细信息**
 
-  这里只包含通过 [`props`](./options-state.html#props) 选项声明的 prop。组件实例将会代理对其 prop 对象上 property 的访问。
+  这里只包含通过 [`props`](./options-state#props) 选项声明的 props。组件实例将会代理对其 props 对象上属性的访问。
 
 ## $el {#el}
 
@@ -55,7 +55,7 @@
   - 对于以多个元素为根的组件，`$el` 将是一个仅作占位符的 DOM 节点，Vue 使用它来跟踪组件在 DOM 中的位置 (文本节点或 SSR 激活模式下的注释节点)。
 
   :::tip
-  为保持一致性，我们推荐使用[模板 ref](/guide/essentials/template-refs.html) 来直接访问元素而不是依赖 `$el`。
+  为保持一致性，我们推荐使用[模板引用](/guide/essentials/template-refs)来直接访问元素而不是依赖 `$el`。
   :::
 
 ## $options {#options}
@@ -89,7 +89,7 @@
   })
   ```
 
-- **参考：** [`app.config.optionMergeStrategies`](/api/application.html#app-config-optionmergestrategies)
+- **参考：**[`app.config.optionMergeStrategies`](/api/application#app-config-optionmergestrategies)
 
 ## $parent {#parent}
 
@@ -117,7 +117,7 @@
 
 ## $slots {#slots}
 
-一个表示父组件所传入[插槽](/guide/components/slots.html)的对象。
+一个表示父组件所传入[插槽](/guide/components/slots)的对象。
 
 - **类型**
 
@@ -131,17 +131,17 @@
 
 - **详细信息**
 
-  通常用于手写[渲染函数](/guide/extras/render-function.html)，但也可用于检测是否存在插槽。
+  通常用于手写[渲染函数](/guide/extras/render-function)，但也可用于检测是否存在插槽。
 
   每一个插槽都在 `this.$slots` 上暴露为一个函数，返回一个 vnode 数组，同时 key 名对应着插槽名。默认插槽暴露为 `this.$slots.default`。
 
-  如果插槽是一个[作用域插槽](/guide/components/slots.html#scoped-slots)，传递给该插槽函数的参数可以作为插槽的 prop 提供给插槽。
+  如果插槽是一个[作用域插槽](/guide/components/slots#scoped-slots)，传递给该插槽函数的参数可以作为插槽的 prop 提供给插槽。
 
-- **参考**：[渲染函数 - 渲染插槽](/guide/extras/render-function.html#rendering-slots)
+- **参考**：[渲染函数 - 渲染插槽](/guide/extras/render-function#rendering-slots)
 
 ## $refs {#refs}
 
-一个包含 DOM 元素和组件实例的对象，通过[模板 ref](/guide/essentials/template-refs.html) 注册。
+一个包含 DOM 元素和组件实例的对象，通过[模板引用](/guide/essentials/template-refs)注册。
 
 - **类型**
 
@@ -153,12 +153,12 @@
 
 - **参考：**
 
-  - [模板 ref](/guide/essentials/template-refs.html)
+  - [模板引用](/guide/essentials/template-refs)
   - [特殊 Attribute - ref](./built-in-special-attributes.md#ref)
 
 ## $attrs {#attrs}
 
-一个包含了组件所有透传 attribute 的对象。
+一个包含了组件所有透传 attributes 的对象。
 
 - **类型**
 
@@ -170,17 +170,17 @@
 
 - **详细信息**
 
-  [透传 Attribute](/guide/components/attrs.html) 是一些由父组件传入的 attribute 和事件处理器，且没有在此子组件中声明为一个 prop 或要抛出的事件。
+  [透传 Attributes](/guide/components/attrs) 是指由父组件传入，且没有被子组件声明为 props 或是组件自定义事件的 attributes 和事件处理函数。
 
-  默认情况下，若是单一根节点组件，`$attrs` 中的所有 property 都是直接自动继承自组件的根元素。而多根节点组件则不会如此，同时你也可以通过配置 [`inheritAttrs`](./options-misc.html#inheritattrs) 选项来显式地关闭该行为。
+  默认情况下，若是单一根节点组件，`$attrs` 中的所有属性都是直接自动继承自组件的根元素。而多根节点组件则不会如此，同时你也可以通过配置 [`inheritAttrs`](./options-misc#inheritattrs) 选项来显式地关闭该行为。
 
 - **参考：**
 
-  - [透传 Attribute](/guide/components/attrs.html)
+  - [透传 Attribute](/guide/components/attrs)
 
 ## $watch() {#watch}
 
-用于创建侦听器的命令式 API。
+用于命令式地创建侦听器的 API。
 
 - **类型**
 
@@ -212,24 +212,24 @@
 
 - **详细信息**
 
-  第一个参数是侦听来源。可以是一个组件的 property 名的字符串，一个简单的由点分隔的路径字符串，或是一个 getter 函数。
+  第一个参数是侦听来源。可以是一个组件的属性名的字符串，一个简单的由点分隔的路径字符串，或是一个 getter 函数。
 
   第二个参数是回调函数。它接收的参数分别是侦听来源的新值、旧值。
 
   - **`immediate`**：指定在侦听器创建时是否立即触发回调。在第一次调用时旧值为 `undefined`。
-  - **`deep`**：指定在侦听来源是一个对象时，是否强制深度遍历，这样回调函数就会在深层级发生变更时被触发。详见[深层侦听器](/guide/essentials/watchers.html#deep-watchers)。
-  - **`flush`**：指定回调函数的刷新时机。详见[回调刷新时机](/guide/essentials/watchers.html#callback-flush-timing)。
-  - **`onTrack / onTrigger`**：调试侦听器的依赖，详见[侦听器调试](/guide/extras/reactivity-in-depth.html#watcher-debugging)。
+  - **`deep`**：指定在侦听来源是一个对象时，是否强制深度遍历，这样回调函数就会在深层级发生变更时被触发。详见[深层侦听器](/guide/essentials/watchers#deep-watchers)。
+  - **`flush`**：指定回调函数的刷新时机。详见[回调刷新时机](/guide/essentials/watchers#callback-flush-timing)及 [`watchEffect()`](/api/reactivity-core#watcheffect)。
+  - **`onTrack / onTrigger`**：调试侦听器的依赖，详见[侦听器调试](/guide/extras/reactivity-in-depth#watcher-debugging)。
 
 - **示例**
 
-  侦听一个 property 名：
+  侦听一个属性名：
 
   ```js
   this.$watch('a', (newVal, oldVal) => {})
   ```
 
-  侦听一个由点分隔的路径：
+  侦听一个由 `.` 分隔的路径：
 
   ```js
   this.$watch('a.b', (newVal, oldVal) => {})
@@ -258,8 +258,8 @@
   ```
 
 - **参考：**
-  - [选项 - `watch`](/api/options-state.html#watch) 
-  - [指南 - 侦听器](/guide/essentials/watchers.html) 
+  - [选项 - `watch`](/api/options-state#watch)
+  - [指南 - 侦听器](/guide/essentials/watchers)
 
 ## $emit() {#emit}
 
@@ -288,8 +288,8 @@
 
 - **参考：**
 
-  - [组件 - 事件](/guide/components/events.html)
-  - [`emits` 选项](./options-state.html#emits)
+  - [组件 - 事件](/guide/components/events)
+  - [`emits` 选项](./options-state#emits)
 
 ## $forceUpdate() {#forceupdate}
 
@@ -309,7 +309,7 @@
 
 ## $nextTick() {#nexttick}
 
-绑定在实例上的 [`nextTick()`](./general.html#nexttick) 函数。
+绑定在实例上的 [`nextTick()`](./general#nexttick) 函数。
 
 - **类型**
 
@@ -323,4 +323,4 @@
 
   和全局版本的 `nextTick()` 的唯一区别就是组件传递给 `this.$nextTick()` 的回调函数会带上 `this` 上下文，其绑定了当前组件实例。
 
-- **参考：** [`nextTick()`](./general.html#nexttick)
+- **参考：**[`nextTick()`](./general#nexttick)

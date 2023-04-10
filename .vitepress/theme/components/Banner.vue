@@ -5,33 +5,27 @@
  * 2. uncomment and update BANNER_ID in ../../inlined-scripts/restorePreferences.ts
  * 3. update --vt-banner-height if necessary
  */
+import { ref } from 'vue'
 
-let open = $ref(true)
+const open = ref(true)
 
 /**
  * Call this if the banner is dismissible
  */
 function dismiss() {
-  open = false
+  open.value = false
   document.documentElement.classList.add('banner-dismissed')
   localStorage.setItem(`vue-docs-banner-${__VUE_BANNER_ID__}`, 'true')
 }
 </script>
 
 <template>
-  <div class="banner" v-if="open">
-    Vue 3 已经成为当前默认版本！
-    <a
-      href="https://blog.vuejs.org/posts/vue-3-as-the-new-default.html"
-      target="_blank"
-      >了解更多</a
-    >
-  </div>
+  <div class="banner" v-if="open"></div>
 </template>
 
 <style>
 html:not(.banner-dismissed) {
-  --vt-banner-height: 24px;
+  --vt-banner-height: 60px;
 }
 </style>
 
@@ -44,7 +38,7 @@ html:not(.banner-dismissed) {
   left: 0;
   right: 0;
   height: var(--vt-banner-height);
-  line-height: var(--vt-banner-height);
+  line-height: 0;
   text-align: center;
   font-size: 12px;
   font-weight: 600;
@@ -54,9 +48,5 @@ html:not(.banner-dismissed) {
 
 .banner-dismissed .banner {
   display: none;
-}
-
-a {
-  text-decoration: underline;
 }
 </style>
