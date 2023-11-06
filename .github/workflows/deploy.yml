@@ -28,7 +28,7 @@ jobs:
           node-version: 16
           cache: 'pnpm'
 
-      - run: pnpm install
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm run build
 
       - name: Build and push Docker images
