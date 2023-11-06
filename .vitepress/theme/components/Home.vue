@@ -73,8 +73,7 @@ onMounted(async () => {
             />
           </picture>
           <img
-            width="168"
-            height="42"
+            width="140"
             v-else
             :src="`${base}/images/${img}`"
             :alt="name"
@@ -250,6 +249,10 @@ html:not(.dark) .accent,
   font-size: 13px;
   vertical-align: middle;
   flex: 1;
+}
+
+#special-sponsor .lead {
+  flex: initial;
 }
 
 #special-sponsor a:hover {

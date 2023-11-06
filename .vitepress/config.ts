@@ -4,6 +4,7 @@ import { defineConfigWithTheme } from 'vitepress'
 import type { Config as ThemeConfig } from '@vue/theme'
 import baseConfig from '@vue/theme/config'
 import { headerPlugin } from './headerMdPlugin'
+// import { textAdPlugin } from './textAdMdPlugin'
 
 const nav: ThemeConfig['nav'] = [
   {
@@ -15,6 +16,7 @@ const nav: ThemeConfig['nav'] = [
       { text: '示例', link: '/examples/' },
       { text: '快速上手', link: '/guide/quick-start' },
       // { text: '风格指南', link: '/style-guide/' },
+      { text: '术语表', link: '/glossary/' },
       {
         text: 'Vue 2 文档',
         link: 'https://v2.cn.vuejs.org'
@@ -32,7 +34,7 @@ const nav: ThemeConfig['nav'] = [
   },
   {
     text: '演练场',
-    link: 'https://sfc.vuejs.org'
+    link: 'https://play.vuejs.org'
   },
   {
     text: '生态系统',
@@ -43,6 +45,10 @@ const nav: ThemeConfig['nav'] = [
         items: [
           { text: '合作伙伴', link: '/partners/' },
           { text: '主题', link: '/ecosystem/themes' },
+          {
+            text: '证书',
+            link: 'https://certification.vuejs.org/?ref=vuejs-nav'
+          },
           { text: '找工作', link: 'https://vuejobs.com/?ref=vuejs' },
           { text: 'T-Shirt 商店', link: 'https://vue.threadless.com/' }
         ]
@@ -104,7 +110,7 @@ const nav: ThemeConfig['nav'] = [
         text: '社区指南',
         link: '/about/community-guide'
       },
-      { text: '行为规范', link: 'https://vuejs.org/about/coc.html' },
+      { text: '行为规范', link: '/about/coc' },
       {
         text: '纪录片',
         link: 'https://www.youtube.com/watch?v=OrxmtDw4pVI'
@@ -313,7 +319,7 @@ export const sidebar: ThemeConfig['sidebar'] = {
         {
           text: '动画技巧',
           link: '/guide/extras/animation'
-        },
+        }
         // {
         //   text: '为 Vue 构建一个库',
         //   link: '/guide/extras/building-a-library'
@@ -660,6 +666,26 @@ export default defineConfigWithTheme<ThemeConfig>({
         repo: 'https://github.com/vuejs-translations/docs-fr'
       },
       {
+        link: 'https://ko.vuejs.org',
+        text: '한국어',
+        repo: 'https://github.com/vuejs-translations/docs-ko'
+      },
+      {
+        link: 'https://pt.vuejs.org',
+        text: 'Português',
+        repo: 'https://github.com/vuejs-translations/docs-pt'
+      },
+      {
+        link: 'https://bn.vuejs.org',
+        text: 'বাংলা',
+        repo: 'https://github.com/vuejs-translations/docs-bn'
+      },
+      {
+        link: 'https://it.vuejs.org',
+        text: 'Italiano',
+        repo: 'https://github.com/vuejs-translations/docs-it'
+      },
+      {
         link: '/translations/',
         text: '帮助我们翻译！',
         isTranslationsDesc: true
@@ -734,13 +760,14 @@ export default defineConfigWithTheme<ThemeConfig>({
         text: '版权声明',
         link: 'https://github.com/vuejs-translations/docs-zh-cn#%E7%89%88%E6%9D%83%E5%A3%B0%E6%98%8E'
       },
-      copyright: `本中文文档内容版权为 Vue 官方团队及翻译贡献者所有，保留所有权利。`
+      copyright: '本中文文档采用 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议  (CC BY-NC-SA 4.0) 进行许可。'
     }
   },
 
   markdown: {
     config(md) {
       md.use(headerPlugin)
+      // .use(textAdPlugin)
     }
   },
 

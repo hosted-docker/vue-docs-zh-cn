@@ -55,7 +55,7 @@ onMounted(() => {
 
 组合式 API 最基本的优势是它使我们能够通过[组合函数](/guide/reusability/composables)来实现更加简洁高效的逻辑复用。在选项式 API 中我们主要的逻辑复用机制是 mixins，而组合式 API 解决了 [mixins 的所有缺陷](/guide/reusability/composables#vs-mixins)。
 
-组合式 API 提供的逻辑复用能力孵化了一些非常棒的社区项目，比如 [VueUse](https://vueuse.org/)，一个不断成长的工具型组合式函数集合。组合式 API 还为其他第三方状态管理库与 Vue 的响应式系统之间的集成提供了一套简洁清晰的机制，例如[不可变数据](/guide/extras/reactivity-in-depth#immutable-data)、[状态机](/guide/extras/reactivity-in-depth#state-machines)与 [RxJS](https://vueuse.org/rxjs/readme.html#vueuse-rxjs)。
+组合式 API 提供的逻辑复用能力孵化了一些非常棒的社区项目，比如 [VueUse](https://vueuse.org/)，一个不断成长的工具型组合式函数集合。组合式 API 还为其他第三方状态管理库与 Vue 的响应式系统之间的集成提供了一套简洁清晰的机制，例如[不可变数据](/guide/extras/reactivity-in-depth#immutable-data)、[状态机](/guide/extras/reactivity-in-depth#state-machines)与 [RxJS](/guide/extras/reactivity-in-depth#rxjs)。
 
 ### 更灵活的代码组织 {#more-flexible-code-organization}
 
@@ -106,11 +106,17 @@ onMounted(() => {
 
 ### 组合式 API 是否覆盖了所有场景？ {#does-composition-api-cover-all-use-cases}
 
-组合式 API 能够覆盖所有状态逻辑方面的需求。除此之外，只需要用到一小部分选项：`props`，`emits`，`name` 和 `inheritAttrs`。如果使用 `<script setup>`，那么 `inheritAttrs` 应该是唯一一个需要用额外的 `<script>` 块书写的选项了。
+组合式 API 能够覆盖所有状态逻辑方面的需求。除此之外，只需要用到一小部分选项：`props`，`emits`，`name` 和 `inheritAttrs`。
 
-如果你在代码中**只**使用了组合式 API (以及上述必需的选项)，那么你可以通过配置[编译时标记](https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags)来去掉 Vue 运行时中针对选项式 API 支持的代码，从而减小生产包大概几 kb 左右的体积。注意这个配置也会影响你依赖中的 Vue 组件。
+:::tip
 
-### 可以同时使用两种 API 吗？ {#can-i-use-both-apis-together}
+从 3.3 开始你可以直接通过 `<script setup>` 中的 `defineOptions` 来设置组件名或 `inheritAttrs` 属性。
+
+:::
+
+如果你在代码中只使用了组合式 API (以及上述必需的选项)，那么你可以通过配置[编译时标记](https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags)来去掉 Vue 运行时中针对选项式 API 支持的代码，从而减小生产包大概几 kb 左右的体积。注意这个配置也会影响你依赖中的 Vue 组件。
+
+### 可以在同一个组件中使用两种 API 吗？ {#can-i-use-both-apis-in-the-same-component}
 
 可以。你可以在一个选项式 API 的组件中通过 [`setup()`](/api/composition-api-setup) 选项来使用组合式 API。
 

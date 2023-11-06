@@ -3,7 +3,10 @@
 :::danger 已废弃的实验性功能
 响应性语法糖曾经是一个实验性功能，且已被废弃，请阅读[废弃原因](https://github.com/vuejs/rfcs/discussions/369#discussioncomment-5059028)。
 
-在未来的一个小版本更新中，它将会从 Vue core 中被移除。如需继续使用，请通过 [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html) 插件。
+在未来的一个小版本更新中，它将会从 Vue core 中被移除。
+
+- 想要摆脱它的话，请查看这个[命令行工具](https://github.com/edison1105/drop-reactivity-transform)，它可以自动完成这一过程。
+- 如需继续使用，请通过 [Vue Macros](https://vue-macros.sxzz.moe/features/reactivity-transform.html) 插件。
 :::
 
 :::tip 组合式 API 特有
@@ -111,7 +114,7 @@ let count = $(myCreateRef())
 
 1. 和 `.value` 类似，为了保持响应性，你始终需要以 `props.x` 的方式访问这些 prop。这意味着你不能够解构 `defineProps` 的返回值，因为得到的变量将不是响应式的、也不会更新。
 
-2. 当使用[基于类型的 props 的声明](https://v3.vuejs.org/api/sfc-script-setup#typescript-only-features)时，无法很方便地声明这些 prop 的默认值。为此我们提供了 `withDefaults()` 这个 API，但使用起来仍然很笨拙。
+2. 当使用[基于类型的 props 的声明](https://v3.vuejs.org/api/sfc-script-setup#type-only-props-emit-declarations)时，无法很方便地声明这些 prop 的默认值。为此我们提供了 `withDefaults()` 这个 API，但使用起来仍然很笨拙。
 
 当 `defineProps` 与解构一起使用时，我们可以通过应用编译时转换来解决这些问题，类似于我们之前看到的 `$()`：
 

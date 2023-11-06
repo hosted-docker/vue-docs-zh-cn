@@ -87,7 +87,13 @@ data() {
 <div :class="classObject"></div>
 ```
 
-这也会渲染出相同的结果。我们也可以绑定一个返回对象的[计算属性](./computed)。这是一个常见且很有用的技巧：
+这将渲染：
+
+```vue-html
+<div class="active"></div>
+```
+
+我们也可以绑定一个返回对象的[计算属性](./computed)。这是一个常见且很有用的技巧：
 
 <div class="composition-api">
 
@@ -182,7 +188,7 @@ data() {
 
 > 本节假设你已经有 [Vue 组件](/guide/essentials/component-basics)的知识基础。如果没有，你也可以暂时跳过，以后再阅读。
 
-对于只有一个根元素的组件，当你使用了 `class` attribute 时，这些 class 会被添加到根元素上，并与该元素上已有的 class 合并。
+对于只有一个根元素的组件，当你使用了 `class` attribute 时，这些 class 会被添加到根元素上并与该元素上已有的 class 合并。
 
 举例来说，如果你声明了一个组件名叫 `MyComponent`，模板如下：
 

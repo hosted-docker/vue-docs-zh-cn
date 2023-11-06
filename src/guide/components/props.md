@@ -144,7 +144,7 @@ export default {
 <span>{{ greetingMessage }}</span>
 ```
 
-虽然理论上你也可以在向子组件传递 props 时使用 camelCase 形式 (使用 [DOM 模板](/guide/essentials/component-basics#dom-template-parsing-caveats)时例外)，但实际上为了和 HTML attribute 对齐，我们通常会将其写为 kebab-case 形式：
+虽然理论上你也可以在向子组件传递 props 时使用 camelCase 形式 (使用 [DOM 内模板](/guide/essentials/component-basics#in-dom-template-parsing-caveats)时例外)，但实际上为了和 HTML attribute 对齐，我们通常会将其写为 kebab-case 形式：
 
 ```vue-html
 <MyComponent greeting-message="hello" />
@@ -490,7 +490,7 @@ export default {
 
 <div class="composition-api">
 
-如果使用了[基于类型的 prop 声明](/api/sfc-script-setup#typescript-only-features) <sup class="vt-badge ts" />，Vue 会尽最大努力在运行时按照 prop 的类型标注进行编译。举例来说，`defineProps<{ msg: string }>` 会被编译为 `{ msg: { type: String, required: true }}`。
+如果使用了[基于类型的 prop 声明](/api/sfc-script-setup#type-only-props-emit-declarations) <sup class="vt-badge ts" />，Vue 会尽最大努力在运行时按照 prop 的类型标注进行编译。举例来说，`defineProps<{ msg: string }>` 会被编译为 `{ msg: { type: String, required: true }}`。
 
 </div>
 <div class="options-api">
@@ -585,13 +585,29 @@ export default {
 <MyComponent />
 ```
 
-当一个 prop 被声明为允许多种类型时，例如：
+当一个 prop 被声明为允许多种类型时，`Boolean` 的转换规则也将被应用。然而，当同时允许 `String` 和 `Boolean` 时，有一种边缘情况——只有当 `Boolean` 出现在 `String` 之前时，`Boolean` 转换规则才适用：
 
 <div class="composition-api">
 
 ```js
+// disabled 将被转换为 true
 defineProps({
   disabled: [Boolean, Number]
+})
+  
+// disabled 将被转换为 true
+defineProps({
+  disabled: [Boolean, String]
+})
+  
+// disabled 将被转换为 true
+defineProps({
+  disabled: [Number, Boolean]
+})
+  
+// disabled 将被解析为空字符串 (disabled="")
+defineProps({
+  disabled: [String, Boolean]
 })
 ```
 
@@ -599,13 +615,33 @@ defineProps({
 <div class="options-api">
 
 ```js
+// disabled 将被转换为 true
 export default {
   props: {
     disabled: [Boolean, Number]
   }
 }
+  
+// disabled 将被转换为 true
+export default {
+  props: {
+    disabled: [Boolean, String]
+  }
+}
+  
+// disabled 将被转换为 true
+export default {
+  props: {
+    disabled: [Number, Boolean]
+  }
+}
+  
+// disabled 将被解析为空字符串 (disabled="")
+export default {
+  props: {
+    disabled: [String, Boolean]
+  }
+}
 ```
 
 </div>
-
-无论声明类型的顺序如何，`Boolean` 类型的特殊转换规则都会被应用。

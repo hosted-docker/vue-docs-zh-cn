@@ -22,7 +22,7 @@
   import { createApp } from 'vue'
 
   const app = createApp({
-    /* root component options */
+    /* 根组件选项 */
   })
   ```
 
@@ -35,7 +35,7 @@
   const app = createApp(App)
   ```
 
-- **参考**：[指南 - 创建一个 Vue 应用实例](/guide/essentials/application)
+- **参考**[指南 - 创建一个 Vue 应用实例](/guide/essentials/application)
 
 ## createSSRApp() {#createssrapp}
 
@@ -87,6 +87,128 @@
   ```ts
   interface App {
     unmount(): void
+  }
+  ```
+
+## app.component() {#app-component}
+
+如果同时传递一个组件名字符串及其定义，则注册一个全局组件；如果只传递一个名字，则会返回用该名字注册的组件 (如果存在的话)。
+
+- **类型**
+
+  ```ts
+  interface App {
+    component(name: string): Component | undefined
+    component(name: string, component: Component): this
+  }
+  ```
+
+- **示例**
+
+  ```js
+  import { createApp } from 'vue'
+
+  const app = createApp({})
+
+  // 注册一个选项对象
+  app.component('my-component', {
+    /* ... */
+  })
+
+  // 得到一个已注册的组件
+  const MyComponent = app.component('my-component')
+  ```
+
+- **参考**[组件注册](/guide/components/registration)
+
+## app.directive() {#app-directive}
+
+如果同时传递一个名字和一个指令定义，则注册一个全局指令；如果只传递一个名字，则会返回用该名字注册的指令 (如果存在的话)。
+
+- **类型**
+
+  ```ts
+  interface App {
+    directive(name: string): Directive | undefined
+    directive(name: string, directive: Directive): this
+  }
+  ```
+
+- **示例**
+
+  ```js
+  import { createApp } from 'vue'
+
+  const app = createApp({
+    /* ... */
+  })
+
+  // 注册（对象形式的指令）
+  app.directive('my-directive', {
+    /* 自定义指令钩子 */
+  })
+
+  // 注册（函数形式的指令）
+  app.directive('my-directive', () => {
+    /* ... */
+  })
+
+  // 得到一个已注册的指令
+  const myDirective = app.directive('my-directive')
+  ```
+
+- **参考**[自定义指令](/guide/reusability/custom-directives)
+
+## app.use() {#app-use}
+
+安装一个[插件](/guide/reusability/plugins)。
+
+- **类型**
+
+  ```ts
+  interface App {
+    use(plugin: Plugin, ...options: any[]): this
+  }
+  ```
+
+- **详细信息**
+
+  第一个参数应是插件本身，可选的第二个参数是要传递给插件的选项。
+
+  插件可以是一个带 `install()` 方法的对象，亦或直接是一个将被用作 `install()` 方法的函数。插件选项 (`app.use()` 的第二个参数) 将会传递给插件的 `install()` 方法。
+
+  若 `app.use()` 对同一个插件多次调用，该插件只会被安装一次。
+
+- **示例**
+
+  ```js
+  import { createApp } from 'vue'
+  import MyPlugin from './plugins/MyPlugin'
+
+  const app = createApp({
+    /* ... */
+  })
+
+  app.use(MyPlugin)
+  ```
+
+- **参考**[插件](/guide/reusability/plugins)
+
+## app.mixin() {#app-mixin}
+
+应用一个全局 mixin (适用于该应用的范围)。一个全局的 mixin 会作用于应用中的每个组件实例。
+
+:::warning 不推荐
+Mixins 在 Vue 3 支持主要是为了向后兼容，因为生态中有许多库使用到。在新的应用中应尽量避免使用 mixin，特别是全局 mixin。
+
+若要进行逻辑复用，推荐用[组合式函数](/guide/reusability/composables)来替代。
+:::
+
+- **类型**
+
+  ```ts
+  interface App {
+    mixin(mixin: ComponentOptions): this
   }
   ```
 
@@ -144,130 +266,39 @@
 
   </div>
 
-- **参考：**
+- **参考**
   - [依赖注入](/guide/components/provide-inject)
   - [应用层 Provide](/guide/components/provide-inject#app-level-provide)
+  - [app.runWithContext()](#app-runwithcontext)
 
-## app.component() {#app-component}
+## app.runWithContext()<sup class="vt-badge" data-text="3.3+" /> {#app-runwithcontext}
 
-如果同时传递一个组件名字符串及其定义，则注册一个全局组件；如果只传递一个名字，则会返回用该名字注册的组件 (如果存在的话)。
+使用当前应用作为注入上下文执行回调函数。
 
 - **类型**
 
   ```ts
   interface App {
-    component(name: string): Component | undefined
-    component(name: string, component: Component): this
+    runWithContext<T>(fn: () => T): T
   }
   ```
+
+- **详情**
+
+  需要一个回调函数并立即运行该回调。在回调同步调用期间，即使没有当前活动的组件实例，`inject()` 调用也可以从当前应用提供的值中查找注入。回调的返回值也将被返回。
 
 - **示例**
 
   ```js
-  import { createApp } from 'vue'
+  import { inject } from 'vue'
 
-  const app = createApp({})
+  app.provide('id', 1)
 
-  // 注册一个选项对象
-  app.component('my-component', {
-    /* ... */
+  const injected = app.runWithContext(() => {
+    return inject('id')
   })
 
-  // 得到一个已注册的组件
-  const MyComponent = app.component('my-component')
-  ```
-
-- **参考**：[组件注册](/guide/components/registration)
-
-## app.directive() {#app-directive}
-
-如果同时传递一个名字和一个指令定义，则注册一个全局指令；如果只传递一个名字，则会返回用该名字注册的指令 (如果存在的话)。
-
-- **类型**
-
-  ```ts
-  interface App {
-    directive(name: string): Directive | undefined
-    directive(name: string, directive: Directive): this
-  }
-  ```
-
-- **示例**
-
-  ```js
-  import { createApp } from 'vue'
-
-  const app = createApp({
-    /* ... */
-  })
-
-  // 注册（对象形式的指令）
-  app.directive('my-directive', {
-    /* 自定义指令钩子 */
-  })
-
-  // 注册（函数形式的指令）
-  app.directive('my-directive', () => {
-    /* ... */
-  })
-
-  // 得到一个已注册的指令
-  const myDirective = app.directive('my-directive')
-  ```
-
-- **参考**：[自定义指令](/guide/reusability/custom-directives)
-
-## app.use() {#app-use}
-
-安装一个[插件](/guide/reusability/plugins)。
-
-- **类型**
-
-  ```ts
-  interface App {
-    use(plugin: Plugin, ...options: any[]): this
-  }
-  ```
-
-- **详细信息**
-
-  第一个参数应是插件本身，可选的第二个参数是要传递给插件的选项。
-
-  插件可以是一个带 `install()` 方法的对象，亦或直接是一个将被用作 `install()` 方法的函数。插件选项 (`app.use()` 的第二个参数) 将会传递给插件的 `install()` 方法。
-
-  若 `app.use()` 对同一个插件多次调用，该插件只会被安装一次。
-
-- **示例**
-
-  ```js
-  import { createApp } from 'vue'
-  import MyPlugin from './plugins/MyPlugin'
-
-  const app = createApp({
-    /* ... */
-  })
-
-  app.use(MyPlugin)
-  ```
-
-- **参考**：[插件](/guide/reusability/plugins)
-
-## app.mixin() {#app-mixin}
-
-应用一个全局 mixin (适用于该应用的范围)。一个全局的 mixin 会作用于应用中的每个组件实例。
-
-:::warning 不推荐
-Mixins 在 Vue 3 支持主要是为了向后兼容，因为生态中有许多库使用到。在新的应用中应尽量避免使用 mixin，特别是全局 mixin。
-
-若要进行逻辑复用，推荐用[组合式函数](/guide/reusability/composables)来替代。
-:::
-
-- **类型**
-
-  ```ts
-  interface App {
-    mixin(mixin: ComponentOptions): this
-  }
+  console.log(injected) // 1
   ```
 
 ## app.version {#app-version}
@@ -297,7 +328,7 @@ Mixins 在 Vue 3 支持主要是为了向后兼容，因为生态中有许多库
   }
   ```
 
-- **参考**：[全局 API - version](/api/general#version)
+- **参考**[全局 API - version](/api/general#version)
 
 ## app.config {#app-config}
 
@@ -381,7 +412,7 @@ console.log(app.config)
 
   ```js
   app.config.warnHandler = (msg, instance, trace) => {
-    // `trace` is the component hierarchy trace
+    // `trace` 是组件层级结构的追踪
   }
   ```
 
@@ -389,9 +420,9 @@ console.log(app.config)
 
 设置此项为 `true` 可以在浏览器开发工具的“性能/时间线”页中启用对组件初始化、编译、渲染和修补的性能表现追踪。仅在开发模式和支持 [performance.mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) API 的浏览器中工作。
 
-- **类型** `boolean`
+- **类型**：`boolean`
 
-- **参考**：[指南 - 性能](/guide/best-practices/performance)
+- **参考**[指南 - 性能](/guide/best-practices/performance)
 
 ## app.config.compilerOptions {#app-config-compileroptions}
 
@@ -426,7 +457,7 @@ console.log(app.config)
   }
   ```
 
-- **参考**：[Vue 与 Web Components](/guide/extras/web-components)
+- **参考** [Vue 与 Web Components](/guide/extras/web-components)
 
 ### app.config.compilerOptions.whitespace {#app-config-compileroptions-whitespace}
 
@@ -523,7 +554,7 @@ console.log(app.config)
   }
   ```
 
-- **参考**：[指南 - 扩展全局属性](/guide/typescript/options-api#augmenting-global-properties) <sup class="vt-badge ts" />
+- **参考**[指南 - 扩展全局属性](/guide/typescript/options-api#augmenting-global-properties) <sup class="vt-badge ts" />
 
 ## app.config.optionMergeStrategies {#app-config-optionmergestrategies}
 
@@ -551,9 +582,9 @@ console.log(app.config)
 
   ```js
   const app = createApp({
-    // option from self
+    // 自身的选项
     msg: 'Vue',
-    // option from a mixin
+    // 来自 mixin 的选项
     mixins: [
       {
         msg: 'Hello '
@@ -565,7 +596,7 @@ console.log(app.config)
     }
   })
 
-  // 为  `msg` 定义一个合并策略函数
+  // 为 `msg` 定义一个合并策略函数
   app.config.optionMergeStrategies.msg = (parent, child) => {
     return (parent || '') + (child || '')
   }
@@ -574,4 +605,4 @@ console.log(app.config)
   // 打印 'Hello Vue'
   ```
 
-- **参考**：[组件实例 - `$options`](/api/component-instance#options)
+- **参考**[组件实例 - `$options`](/api/component-instance#options)

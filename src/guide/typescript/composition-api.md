@@ -52,32 +52,10 @@ const props = defineProps<Props>()
 
 #### 语法限制 {#syntax-limitations}
 
-为了生成正确的运行时代码，传给 `defineProps()` 的泛型参数必须是以下之一：
 
-- 一个类型字面量：
+在 3.2 及以下版本中，`defineProps()` 的泛型类型参数仅限于类型文字或对本地接口的引用。
 
-  ```ts
-  defineProps<{ /*... */ }>()
-  ```
-
-- 对**同一个文件**中的一个接口或对象类型字面量的引用：
-
-  ```ts
-  interface Props {/* ... */}
-
-  defineProps<Props>()
-  ```
-
-接口或对象字面类型可以包含从其他文件导入的类型引用，但是，传递给 `defineProps` 的泛型参数本身**不能**是一个导入的类型：
-
-```ts
-import { Props } from './other-file'
-
-// 不支持！
-defineProps<Props>()
-```
-
-这是因为 Vue 组件是单独编译的，编译器目前不会抓取导入的文件以分析源类型。我们计划在未来的版本中解决这个限制。
+这个限制在 3.3 中得到了解决。最新版本的 Vue 支持在类型参数位置引用导入和有限的复杂类型。但是，由于类型到运行时转换仍然基于 AST，一些需要实际类型分析的复杂类型，例如条件类型，还未支持。您可以使用条件类型来指定单个 prop 的类型，但不能用于整个 props 对象的类型。
 
 ### Props 解构默认值 {#props-default-values}
 
@@ -171,10 +149,21 @@ const emit = defineEmits<{
   (e: 'change', id: number): void
   (e: 'update', value: string): void
 }>()
+
+// 3.3+: 可选的、更简洁的语法
+const emit = defineEmits<{
+  change: [id: number]
+  update: [value: string]
+}>()
 </script>
 ```
 
-这个类型参数应该是一个带[调用签名](https://www.typescriptlang.org/docs/handbook/2/functions.html#call-signatures)的类型字面量。这个类型字面量的类型就是返回的 `emit` 函数的类型。我们可以看到，基于类型的声明使我们可以对所触发事件的类型进行更细粒度的控制。
+类型参数可以是以下的一种：
+
+1. 一个可调用的函数类型，但是写作一个包含[调用签名](https://www.typescriptlang.org/docs/handbook/2/functions.html#call-signatures)的类型字面量。它将被用作返回的 `emit` 函数的类型。
+2. 一个类型字面量，其中键是事件名称，值是数组或元组类型，表示事件的附加接受参数。上面的示例使用了具名元组，因此每个参数都可以有一个显式的名称。
+
+我们可以看到，基于类型的声明使我们可以对所触发事件的类型进行更细粒度的控制。
 
 若没有使用 `<script setup>`，`defineComponent()` 也可以根据 `emits` 选项推导暴露在 setup 上下文中的 `emit` 函数的类型：
 
@@ -299,7 +288,7 @@ function handleChange(event) {
 </template>
 ```
 
-没有类型标注时，这个 `event` 参数会隐式地标注为 `any` 类型。这也会在 `tsconfig.json` 中配置了 `"strict": true` 或 `"noImplicitAny": true` 时报出一个 TS 错误。因此，建议显式地为事件处理函数的参数标注类型。此外，你可能需要显式地强制转换 `event` 上的属性：
+没有类型标注时，这个 `event` 参数会隐式地标注为 `any` 类型。这也会在 `tsconfig.json` 中配置了 `"strict": true` 或 `"noImplicitAny": true` 时报出一个 TS 错误。因此，建议显式地为事件处理函数的参数标注类型。此外，你在访问 `event` 上的属性时可能需要使用类型断言：
 
 ```ts
 function handleChange(event: Event) {
@@ -363,6 +352,8 @@ onMounted(() => {
   <input ref="el" />
 </template>
 ```
+
+可以通过类似于 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input#technical_summary) 的页面来获取正确的 DOM 接口。
 
 注意为了严格的类型安全，有必要在访问 `el.value` 时使用可选链或类型守卫。这是因为直到组件被挂载前，这个 ref 的值都是初始的 `null`，并且在由于 `v-if` 的行为将引用的元素卸载时也可以被设置为 `null`。
 

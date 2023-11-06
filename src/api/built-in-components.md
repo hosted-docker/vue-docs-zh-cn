@@ -103,7 +103,7 @@ h(Transition, {
   ```
 
   通过改变 `key` 属性来强制过度执行：
-  
+
   ```vue-html
   <Transition>
     <div :key="text">{{ text }}</div>
@@ -126,7 +126,7 @@ h(Transition, {
   </Transition>
   ```
 
-- **参考**：[`<Transition>` 指南](/guide/built-ins/transition)
+- **参考** [`<Transition>` 指南](/guide/built-ins/transition)
 
 ## `<TransitionGroup>` {#transitiongroup}
 
@@ -172,7 +172,7 @@ h(Transition, {
   </TransitionGroup>
   ```
 
-- **参考**：[指南 - TransitionGroup](/guide/built-ins/transition-group)
+- **参考**[指南 - TransitionGroup](/guide/built-ins/transition-group)
 
 ## `<KeepAlive>` {#keepalive}
 
@@ -265,7 +265,7 @@ h(Transition, {
   </KeepAlive>
   ```
 
-- **参考**：[指南 - KeepAlive](/guide/built-ins/keep-alive)
+- **参考**[指南 - KeepAlive](/guide/built-ins/keep-alive)
 
 ## `<Teleport>` {#teleport}
 
@@ -294,20 +294,20 @@ h(Transition, {
   指定目标容器：
 
   ```vue-html
-  <teleport to="#some-id" />
-  <teleport to=".some-class" />
-  <teleport to="[data-teleport]" />
+  <Teleport to="#some-id" />
+  <Teleport to=".some-class" />
+  <Teleport to="[data-teleport]" />
   ```
 
   有条件地禁用：
 
   ```vue-html
-  <teleport to="#popup" :disabled="displayVideoInline">
+  <Teleport to="#popup" :disabled="displayVideoInline">
     <video src="./my-movie.mp4">
-  </teleport>
+  </Teleport>
   ```
 
-- **参考**：[指南 - Teleport](/guide/built-ins/teleport)
+- **参考**[指南 - Teleport](/guide/built-ins/teleport)
 
 ## `<Suspense>` <sup class="vt-badge experimental" /> {#suspense}
 
@@ -333,4 +333,4 @@ h(Transition, {
 
   如果在渲染时遇到异步依赖项 ([异步组件](/guide/components/async)和具有 [`async setup()`](/guide/built-ins/suspense#async-setup) 的组件)，它将等到所有异步依赖项解析完成时再显示默认插槽。
 
-- **参考**：[指南 - Suspense](/guide/built-ins/suspense)
+- **参考**[指南 - Suspense](/guide/built-ins/suspense)

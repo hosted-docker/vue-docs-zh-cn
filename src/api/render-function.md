@@ -93,7 +93,7 @@
   })
   ```
 
-- **参考**：[指南 - 渲染函数 - 创建 VNode](/guide/extras/render-function#creating-vnodes)
+- **参考**[指南 - 渲染函数 - 创建 VNode](/guide/extras/render-function#creating-vnodes)
 
 ## mergeProps() {#mergeprops}
 
@@ -199,7 +199,7 @@
   <div class="composition-api">
 
   ```js
-  const { h, resolveComponent } = Vue
+  import { h, resolveComponent } from 'vue'
 
   export default {
     setup() {
@@ -216,7 +216,7 @@
   <div class="options-api">
 
   ```js
-  const { h, resolveComponent } = Vue
+  import { h, resolveComponent } from 'vue'
 
   export default {
     render() {
@@ -228,7 +228,7 @@
 
   </div>
 
-- **参考**：[指南 - 渲染函数 - 组件](/guide/extras/render-function#components)
+- **参考**[指南 - 渲染函数 - 组件](/guide/extras/render-function#components)
 
 ## resolveDirective() {#resolvedirective}
 
@@ -242,13 +242,13 @@
 
 - **详细信息**
 
-  **备注：如果你可以直接引入组件就不需使用此方法。**
+  **备注：如果你可以直接引入指令就不需使用此方法。**
 
   为了能从正确的组件上下文进行解析，`resolveDirective()` 必须在<span class="composition-api"> `setup()` 或</span>渲染函数内调用。
 
   如果指令没有找到，会抛出一个运行时警告，并返回 `undefined`。
 
-- **参考**：[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function#custom-directives)
+- **参考**[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function#custom-directives)
 
 ## withDirectives() {#withdirectives}
 
@@ -296,7 +296,7 @@
   ])
   ```
 
-- **参考**：[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function#custom-directives)
+- **参考**[指南 - 渲染函数 - 自定义指令](/guide/extras/render-function#custom-directives)
 
 ## withModifiers() {#withmodifiers}
 
@@ -314,11 +314,11 @@
   import { h, withModifiers } from 'vue'
 
   const vnode = h('button', {
-    // 等价于 v-on.stop.prevent
+    // 等价于 v-on:click.stop.prevent
     onClick: withModifiers(() => {
       // ...
     }, ['stop', 'prevent'])
   })
   ```
 
-- **参考**：[指南 - 渲染函数 - 事件修饰符](/guide/extras/render-function#event-modifiers)
+- **参考**[指南 - 渲染函数 - 事件修饰符](/guide/extras/render-function#event-modifiers)
